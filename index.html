@@ -1,0 +1,3700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Logbook — Post-Timeskip Worldbuilding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-bg: #F3EBD7;
+    --color-surface: #FBF7EC;
+    --color-surface-2: #EAE0C4;
+    --color-border: rgba(27,44,71,0.20);
+    --color-border-strong: rgba(27,44,71,0.38);
+    --color-text: #1B2C47;
+    --color-text-dim: rgba(27,44,71,0.64);
+    --color-brass: #93641F;
+    --color-brass-strong: #7A5119;
+    --color-tide: #256169;
+    --color-tide-soft: rgba(37,97,105,0.14);
+    --color-coral: #A6472F;
+    --color-coral-soft: rgba(166,71,47,0.14);
+    --color-rope: #6B4A34;
+    --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-body: 'Work Sans', -apple-system, 'Segoe UI', sans-serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --color-bg: #101E32;
+      --color-surface: #16283F;
+      --color-surface-2: #1E3552;
+      --color-border: rgba(241,233,210,0.16);
+      --color-border-strong: rgba(241,233,210,0.32);
+      --color-text: #F1E9D2;
+      --color-text-dim: rgba(241,233,210,0.64);
+      --color-brass: #D9A94B;
+      --color-brass-strong: #EFC773;
+      --color-tide: #5FB8C0;
+      --color-tide-soft: rgba(95,184,192,0.16);
+      --color-coral: #E08063;
+      --color-coral-soft: rgba(224,128,99,0.16);
+      --color-rope: #B78F6A;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --color-bg: #101E32;
+    --color-surface: #16283F;
+    --color-surface-2: #1E3552;
+    --color-border: rgba(241,233,210,0.16);
+    --color-border-strong: rgba(241,233,210,0.32);
+    --color-text: #F1E9D2;
+    --color-text-dim: rgba(241,233,210,0.64);
+    --color-brass: #D9A94B;
+    --color-brass-strong: #EFC773;
+    --color-tide: #5FB8C0;
+    --color-tide-soft: rgba(95,184,192,0.16);
+    --color-coral: #E08063;
+    --color-coral-soft: rgba(224,128,99,0.16);
+    --color-rope: #B78F6A;
+    color-scheme: dark;
+  }
+  :root[data-theme="black"] {
+    --color-bg: #000000;
+    --color-surface: #0A0A0A;
+    --color-surface-2: #161616;
+    --color-border: rgba(237,234,221,0.12);
+    --color-border-strong: rgba(237,234,221,0.26);
+    --color-text: #EDEADD;
+    --color-text-dim: rgba(237,234,221,0.58);
+    --color-brass: #D9A94B;
+    --color-brass-strong: #EFC773;
+    --color-tide: #5FB8C0;
+    --color-tide-soft: rgba(95,184,192,0.14);
+    --color-coral: #E08063;
+    --color-coral-soft: rgba(224,128,99,0.14);
+    --color-rope: #B78F6A;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; margin: 0; }
+  button, input, textarea, select { font-family: inherit; font-size: inherit; color: inherit; }
+  button { cursor: pointer; }
+  ::selection { background: var(--color-tide-soft); }
+
+  .app { display: flex; min-height: 100vh; }
+
+  /* ---------- Sidebar ---------- */
+  .sidebar {
+    width: 236px;
+    flex-shrink: 0;
+    background: var(--color-surface);
+    border-right: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    padding: 22px 14px;
+    gap: 22px;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    padding: 0 8px;
+  }
+  .brand svg { flex-shrink: 0; color: var(--color-brass); }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+  .brand-text strong { font-family: var(--font-display); font-size: 17px; }
+  .brand-text span { font-size: 11.5px; color: var(--color-text-dim); }
+
+  nav.primary-nav { display: flex; flex-direction: column; gap: 3px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 11px;
+    padding: 9px 10px;
+    border-radius: 7px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--color-text-dim);
+    text-align: left;
+    width: 100%;
+    transition: background .12s ease, color .12s ease;
+  }
+  .nav-item svg { flex-shrink: 0; width: 17px; height: 17px; }
+  .nav-item:hover { background: var(--color-surface-2); color: var(--color-text); }
+  .nav-item.active {
+    background: var(--color-tide-soft);
+    color: var(--color-tide);
+    border-color: rgba(37,97,105,0.22);
+    font-weight: 600;
+  }
+  :root[data-theme="dark"] .nav-item.active, :root:not([data-theme="light"]) .nav-item.active { border-color: rgba(95,184,192,0.28); }
+
+  .nav-divider { display: flex; align-items: center; gap: 8px; padding: 2px 10px; margin-top: -6px; }
+  .nav-divider::after { content: ""; flex: 1; height: 1px; background: var(--color-border); }
+  .nav-divider .label { font-size: 11px; color: var(--color-text-dim); }
+  .nav-item-special.active { background: var(--color-coral-soft); color: var(--color-coral); border-color: rgba(166,71,47,0.28); }
+
+  .has-tip { position: relative; }
+  .has-tip::after {
+    content: attr(data-tooltip);
+    position: absolute; left: calc(100% + 10px); top: 50%; transform: translateY(-50%);
+    background: var(--color-text); color: var(--color-bg);
+    padding: 5px 10px; border-radius: 6px; font-size: 12px; white-space: nowrap;
+    opacity: 0; pointer-events: none; transition: opacity .1s ease .05s;
+    z-index: 60;
+  }
+  .has-tip:hover::after, .has-tip:focus-visible::after { opacity: 1; }
+  @media (max-width: 780px) {
+    .has-tip::after { left: 50%; top: calc(100% + 8px); transform: translateX(-50%); }
+  }
+
+  .sidebar-foot { margin-top: auto; display: flex; flex-direction: column; gap: 8px; }
+  .theme-toggle {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 10px; border-radius: 7px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    font-size: 12.5px; color: var(--color-text-dim);
+  }
+  .theme-toggle button {
+    border: none; background: none; padding: 4px 6px; border-radius: 5px; color: var(--color-text-dim); font-size: 11.5px;
+  }
+  .theme-toggle button.on { background: var(--color-surface-2); color: var(--color-text); }
+
+  .sync-status {
+    display: flex; align-items: center; gap: 7px;
+    padding: 8px 10px; border-radius: 7px;
+    border: 1px solid var(--color-border); background: var(--color-bg);
+    font-size: 11.5px; color: var(--color-text-dim);
+  }
+  .sync-status .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-text-dim); flex-shrink: 0; }
+  .sync-status.ok .dot { background: #2ECC71; }
+  .sync-status.err .dot { background: var(--color-coral); }
+  .sync-status.local .dot { background: var(--color-brass); }
+
+  /* ---------- Login / profile ---------- */
+  .login-screen {
+    position: fixed; inset: 0; background: var(--color-bg);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px; z-index: 200;
+  }
+  .login-card {
+    background: var(--color-surface); border: 1px solid var(--color-border);
+    border-radius: 12px; padding: 32px; max-width: 380px; width: 100%;
+  }
+  .avatar-upload {
+    width: 84px; height: 84px; border-radius: 50%; overflow: hidden;
+    border: 2px dashed var(--color-border-strong); background: var(--color-bg);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; margin-bottom: 16px; position: relative;
+  }
+  .avatar-upload:hover { background: var(--color-surface-2); }
+  .avatar-upload img { width: 100%; height: 100%; object-fit: cover; }
+  #loginAvatarPlaceholder { font-size: 26px; color: var(--color-text-dim); line-height: 1; }
+
+  .profile-panel {
+    display: flex; align-items: center; gap: 8px; padding: 7px 8px;
+    border-radius: 7px; border: 1px solid var(--color-border); background: var(--color-bg);
+    cursor: pointer;
+  }
+  .profile-panel:hover { background: var(--color-surface-2); }
+  .profile-avatar-circle {
+    width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0; overflow: hidden;
+    background: var(--color-brass); color: #fff; font-size: 13px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .profile-avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+  .profile-info { flex: 1; min-width: 0; }
+  .profile-name { font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .profile-desc { font-size: 11px; color: var(--color-text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .entry-author { font-size: 11px; color: var(--color-text-dim); margin-top: 2px; }
+
+  .timeline-row { display: flex; align-items: flex-start; gap: 14px; padding: 12px 4px; border-bottom: 1px solid var(--color-border); cursor: pointer; }
+  .timeline-row:hover { background: var(--color-surface); }
+  .timeline-date { width: 120px; flex-shrink: 0; font-size: 12px; color: var(--color-text-dim); font-weight: 600; padding-top: 2px; }
+  .timeline-body { flex: 1; min-width: 0; }
+  .timeline-snippet { font-size: 12.5px; color: var(--color-text-dim); margin-top: 3px; }
+  .timeline-section-head { font-size: 12px; color: var(--color-text-dim); text-transform: uppercase; letter-spacing: .04em; margin: 20px 0 6px 4px; }
+
+  /* ---------- Main ---------- */
+  .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .topbar {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding: 26px 34px 18px 34px;
+    border-bottom: 1px solid var(--color-border);
+    gap: 16px; flex-wrap: wrap;
+  }
+  .topbar h1 { font-size: 25px; }
+  .topbar p.sub { margin: 5px 0 0 0; color: var(--color-text-dim); font-size: 13.5px; max-width: 52ch; }
+  .topbar-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 8px 14px; border-radius: 7px;
+    border: 1px solid var(--color-border-strong);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-weight: 500; font-size: 13.5px;
+    transition: transform .1s ease, background .12s ease;
+  }
+  .btn:hover { background: var(--color-surface-2); }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn:disabled:hover { background: var(--color-surface); }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary {
+    background: var(--color-tide); border-color: var(--color-tide); color: #FBF7EC;
+  }
+  .btn-primary:hover { filter: brightness(1.08); }
+  .btn-ghost { border-color: transparent; background: transparent; }
+  .btn-ghost:hover { background: var(--color-surface-2); }
+  .btn-danger { color: var(--color-coral); }
+  .btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  .view { padding: 24px 34px 60px 34px; flex: 1; }
+  .hidden { display: none !important; }
+
+  /* ---------- Empty state ---------- */
+  .empty {
+    border: 1px dashed var(--color-border-strong);
+    border-radius: 10px;
+    padding: 38px 24px;
+    text-align: center;
+    color: var(--color-text-dim);
+    max-width: 520px;
+  }
+  .empty h3 { color: var(--color-text); font-size: 16px; margin-bottom: 6px; }
+  .empty p { margin: 0 0 14px 0; font-size: 13.5px; }
+
+  /* ---------- Dashboard ---------- */
+  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 26px; max-width: 900px; }
+  .stat-card {
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    border-radius: 8px;
+    padding: 14px 16px;
+    border-left: 3px solid var(--color-brass);
+  }
+  .stat-card .n { font-family: var(--font-display); font-size: 26px; }
+  .stat-card .l { font-size: 12px; color: var(--color-text-dim); margin-top: 2px; }
+  .dash-section { margin-bottom: 30px; }
+  .dash-section h2 { font-size: 15px; margin-bottom: 10px; color: var(--color-text-dim); font-weight: 500; }
+  .quick-links { display: flex; flex-wrap: wrap; gap: 9px; }
+  .quick-link {
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    padding: 10px 14px; border-radius: 8px;
+    display: flex; align-items: center; gap: 9px;
+    font-size: 13.5px; font-weight: 500;
+  }
+  .quick-link:hover { background: var(--color-surface-2); }
+  .quick-link svg { width: 15px; height: 15px; color: var(--color-brass); }
+
+  /* ---------- Topics ---------- */
+  .filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; align-items: center; }
+  .chip {
+    padding: 6px 12px; border-radius: 999px; border: 1px solid var(--color-border);
+    background: var(--color-surface); font-size: 12.5px; color: var(--color-text-dim);
+  }
+  .chip.active { background: var(--color-text); color: var(--color-bg); border-color: var(--color-text); }
+  .search-input {
+    padding: 7px 12px; border-radius: 7px; border: 1px solid var(--color-border);
+    background: var(--color-surface); min-width: 200px; flex: 1; max-width: 280px;
+  }
+  .search-input:focus, textarea:focus, select:focus, input:focus { outline: 2px solid var(--color-tide); outline-offset: 1px; }
+
+  .topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+  .topic-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--cat-color, var(--color-brass));
+    border-radius: 6px;
+    padding: 14px 16px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .topic-card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .topic-card h3 { font-size: 16px; line-height: 1.3; }
+  .cat-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cat-color); display: inline-block; margin-right: 6px; }
+  .cat-label { font-size: 11.5px; color: var(--color-text-dim); text-transform: none; }
+  .topic-card .body { font-size: 13px; color: var(--color-text-dim); white-space: pre-wrap; max-height: 90px; overflow: hidden; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag-pill {
+    font-size: 11px; padding: 3px 8px; border-radius: 999px;
+    background: var(--color-tide-soft); color: var(--color-tide);
+  }
+  .link-pill {
+    font-size: 11px; padding: 3px 8px; border-radius: 999px;
+    background: var(--color-coral-soft); color: var(--color-coral);
+    display: inline-flex; align-items: center; gap: 4px; border: none; cursor: pointer;
+  }
+  .link-pill:hover { filter: brightness(0.95); }
+  .link-pill.mm-link { background: var(--color-tide-soft); color: var(--color-tide); }
+  .link-row { display: flex; flex-wrap: wrap; gap: 5px; }
+  .card-actions { display: flex; gap: 4px; }
+  .icon-btn {
+    border: none; background: transparent; color: var(--color-text-dim);
+    padding: 4px; border-radius: 5px; display: flex;
+  }
+  .icon-btn:hover { background: var(--color-surface-2); color: var(--color-text); }
+  .icon-btn svg { width: 14px; height: 14px; }
+
+  /* ---------- Wiki-style linking ---------- */
+  .wiki-link {
+    color: var(--color-tide);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--color-tide);
+    cursor: pointer;
+  }
+  .wiki-link:hover { border-bottom-style: solid; }
+  .wiki-link-missing {
+    color: var(--color-text-dim);
+    border-bottom: 1px dotted var(--color-border-strong);
+    cursor: default;
+  }
+
+  /* ---------- Modal ---------- */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(15,20,30,0.5);
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 40px 16px; overflow-y: auto; z-index: 50;
+  }
+  .modal {
+    background: var(--color-surface); border: 1px solid var(--color-border-strong);
+    border-radius: 10px; max-width: 560px; width: 100%; padding: 24px;
+  }
+  .modal h2 { font-size: 19px; margin-bottom: 16px; }
+  .field { margin-bottom: 14px; display: flex; flex-direction: column; gap: 5px; }
+  .field label { font-size: 12.5px; color: var(--color-text-dim); font-weight: 500; }
+  .field input, .field textarea, .field select {
+    padding: 8px 10px; border-radius: 6px; border: 1px solid var(--color-border);
+    background: var(--color-bg); width: 100%;
+  }
+  .field textarea { min-height: 100px; resize: vertical; font-family: var(--font-body); }
+  .cat-picker { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  /* ---------- Rich text editor ---------- */
+  .rte-toolbar {
+    display: flex; flex-wrap: wrap; gap: 3px; align-items: center;
+    padding: 6px; border: 1px solid var(--color-border); border-bottom: none;
+    border-radius: 6px 6px 0 0; background: var(--color-bg);
+  }
+  .rte-btn {
+    border: 1px solid transparent; background: transparent; padding: 5px 8px;
+    border-radius: 5px; font-size: 13px; min-width: 26px; line-height: 1.2; color: var(--color-text);
+  }
+  .rte-btn:hover { background: var(--color-surface-2); }
+  .rte-sep { width: 1px; height: 18px; background: var(--color-border); margin: 0 3px; flex-shrink: 0; }
+  .rte-hi { width: 22px; height: 22px; padding: 0; border-radius: 5px; background: var(--hi); border: 1px solid var(--color-border-strong); }
+  .rte-link-row { display: none; gap: 6px; padding: 8px; border: 1px solid var(--color-border); border-top: none; background: var(--color-bg); }
+  .rte-link-row.show { display: flex; }
+  .rte-link-row input { flex: 1; padding: 6px 8px; border-radius: 5px; border: 1px solid var(--color-border); background: var(--color-surface); }
+  .rte-editor {
+    border: 1px solid var(--color-border); border-radius: 0 0 6px 6px;
+    min-height: 130px; max-height: 320px; overflow-y: auto;
+    padding: 10px 12px; background: var(--color-bg); font-size: 13.5px; line-height: 1.55;
+  }
+  .rte-editor:empty:before { content: attr(data-placeholder); color: var(--color-text-dim); }
+  .rte-editor blockquote { border-left: 3px solid var(--color-brass); margin: 6px 0; padding: 1px 0 1px 12px; color: var(--color-text-dim); }
+  .rte-editor img { max-width: 100%; border-radius: 6px; margin: 6px 0; display: block; }
+  .rte-editor a { color: var(--color-tide); }
+  .rte-editor ul, .rte-editor ol { padding-left: 22px; margin: 6px 0; }
+
+  .topic-card-thumb { width: calc(100% + 32px); height: 120px; object-fit: cover; display: block; margin: -14px -16px 4px -16px; border-radius: 5px 5px 0 0; }
+
+  .section-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 2px; }
+  .section-tab-btn {
+    font-size: 11.5px; padding: 5px 10px; border-radius: 999px;
+    border: 1px solid var(--color-border); background: var(--color-surface-2); color: var(--color-text-dim);
+  }
+  .section-tab-btn.active { background: var(--color-tide-soft); color: var(--color-tide); border-color: rgba(37,97,105,0.25); font-weight: 600; }
+
+  .section-tab-editor { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .section-tab-editor .sec-tab {
+    display: flex; align-items: center; gap: 5px; padding: 5px 6px 5px 11px;
+    border-radius: 999px; border: 1px solid var(--color-border); background: var(--color-bg); font-size: 12.5px;
+  }
+  .section-tab-editor .sec-tab-name { cursor: pointer; }
+  .section-tab-editor .sec-tab.active { background: var(--color-tide-soft); color: var(--color-tide); border-color: rgba(37,97,105,0.25); font-weight: 600; }
+  .section-tab-editor .sec-tab button { border: none; background: none; padding: 2px 3px; font-size: 11px; color: inherit; opacity: 0.65; border-radius: 4px; }
+  .section-tab-editor .sec-tab button:hover { opacity: 1; background: var(--color-surface-2); }
+  .section-tab-editor .add-section-btn { padding: 5px 12px; border-radius: 999px; border: 1px dashed var(--color-border-strong); background: transparent; font-size: 12.5px; color: var(--color-text-dim); }
+  .section-tab-editor .add-section-btn:hover { background: var(--color-surface-2); }
+  .cat-option {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 11px; border-radius: 7px; border: 1px solid var(--color-border);
+    background: var(--color-bg); font-size: 13px;
+  }
+  .cat-option.selected { border-color: var(--cat-color); background: color-mix(in srgb, var(--cat-color) 14%, var(--color-bg)); }
+  .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+
+  /* ---------- Mind map ---------- */
+  .mm-toolbar { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; }
+  .mm-toolbar .hint { font-size: 12.5px; color: var(--color-text-dim); }
+  .mm-zoom { display: flex; gap: 2px; align-items: center; margin-left: auto; }
+  .mm-zoom .btn { padding: 8px 11px; }
+  .mm-board-card {
+    background: var(--color-surface); border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-rope); border-radius: 8px; padding: 16px;
+    cursor: pointer; display: flex; flex-direction: column; gap: 6px; position: relative;
+  }
+  .mm-board-card:hover { background: var(--color-surface-2); }
+  .mm-board-card h3 { font-size: 16px; padding-right: 54px; }
+  .mm-board-card .meta { font-size: 12px; color: var(--color-text-dim); }
+  .mm-card-actions { position: absolute; top: 10px; right: 10px; }
+  .mm-wrap {
+    border: 1px solid var(--color-border); border-radius: 10px; overflow: auto;
+    background:
+      linear-gradient(var(--color-surface), var(--color-surface)),
+      repeating-linear-gradient(0deg, transparent, transparent 27px, var(--color-border) 28px),
+      repeating-linear-gradient(90deg, transparent, transparent 27px, var(--color-border) 28px);
+    height: 62vh; position: relative;
+  }
+  .mm-canvas { position: relative; width: 1900px; height: 1300px; transform-origin: 0 0; }
+  .mm-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .mm-node {
+    position: absolute; min-width: 120px; max-width: 220px;
+    background: var(--color-bg); border: 2px solid var(--node-color, var(--color-brass));
+    border-radius: 8px; padding: 9px 11px; cursor: grab;
+    font-size: 13px; user-select: none;
+  }
+  .mm-node--large { min-width: 160px; max-width: 280px; font-size: 16px; padding: 12px 14px; }
+  .mm-node--huge { min-width: 200px; max-width: 340px; font-size: 20px; padding: 16px 18px; }
+  .mm-node.linking-src { box-shadow: 0 0 0 3px var(--color-tide-soft); }
+  .mm-node .mm-text { outline: none; word-break: break-word; }
+  .mm-node .mm-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+  .mm-node .mm-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--node-color); border: none; padding: 0; flex-shrink: 0; }
+  .mm-node .mm-controls-right { display: flex; gap: 6px; align-items: center; opacity: 0; transition: opacity .1s; }
+  .mm-node:hover .mm-controls-right { opacity: 1; }
+  .mm-node .mm-size { color: var(--color-text-dim); border: none; background: none; font-size: 12px; line-height: 1; padding: 0 2px; }
+  .mm-node .mm-del { color: var(--color-coral); border: none; background: none; font-size: 13px; line-height: 1; padding: 0 2px; }
+
+  /* ---------- Brainstorm ---------- */
+  .prompt-box {
+    background: var(--color-surface); border: 1px solid var(--color-border);
+    border-radius: 10px; padding: 22px; max-width: 620px; margin-bottom: 18px;
+  }
+  .prompt-cat { font-size: 12px; color: var(--color-tide); font-weight: 600; margin-bottom: 8px; }
+  .prompt-text { font-family: var(--font-display); font-size: 19px; line-height: 1.4; margin-bottom: 16px; }
+  .cat-filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .idea-list { display: flex; flex-direction: column; gap: 10px; max-width: 620px; }
+  .idea-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 12px 14px; }
+  .idea-card .prompt-ref { font-size: 12px; color: var(--color-text-dim); margin-bottom: 5px; }
+
+  /* ---------- Consistency ---------- */
+  .subtabs { display: flex; gap: 6px; margin-bottom: 18px; }
+  .subtab { padding: 7px 14px; border-radius: 7px; border: 1px solid var(--color-border); background: var(--color-surface); font-size: 13px; color: var(--color-text-dim); }
+  .subtab.active { background: var(--color-tide-soft); color: var(--color-tide); border-color: rgba(37,97,105,0.25); }
+  .entity-list { display: flex; flex-direction: column; gap: 8px; max-width: 680px; }
+  .entity-row { border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-surface); }
+  .entity-row summary { padding: 10px 14px; cursor: pointer; display: flex; justify-content: space-between; font-size: 13.5px; list-style: none; }
+  .entity-row summary::-webkit-details-marker { display: none; }
+  .entity-row summary .count { color: var(--color-text-dim); font-size: 12px; }
+  .entity-row .mini-notes { padding: 0 14px 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+  .mini-note { border-left: 2px solid var(--color-border-strong); padding-left: 10px; font-size: 13px; }
+  .mini-note b { font-family: var(--font-display); font-weight: 600; }
+  .mini-note .snippet { color: var(--color-text-dim); white-space: pre-wrap; }
+
+  .compare-pickers { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+  .compare-pickers select { min-width: 220px; }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 760px) { .compare-grid { grid-template-columns: 1fr; } }
+  .compare-panel { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 16px; min-height: 140px; }
+  .compare-panel h4 { font-size: 15px; margin-bottom: 8px; }
+  .compare-panel .meta { font-size: 12px; color: var(--color-text-dim); margin-bottom: 10px; }
+  .compare-panel .content { font-size: 13.5px; white-space: pre-wrap; }
+
+  /* ---------- Drills ---------- */
+  .drill-select-row { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; align-items: flex-end; }
+  .drill-select-row .field { margin-bottom: 0; min-width: 220px; }
+  .drill-form { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 10px; padding: 20px; max-width: 640px; margin-bottom: 24px; }
+  .drill-form h3 { font-size: 17px; margin-bottom: 3px; }
+  .drill-form .drill-desc { font-size: 12.5px; color: var(--color-text-dim); margin-bottom: 16px; }
+  .drill-entries { display: flex; flex-direction: column; gap: 12px; max-width: 640px; }
+  .drill-entry { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; padding: 14px 16px; }
+  .drill-entry-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+  .drill-entry-head h4 { font-size: 15px; }
+  .drill-entry dl { margin: 0; display: flex; flex-direction: column; gap: 6px; }
+  .drill-entry dt { font-size: 11.5px; color: var(--color-text-dim); margin-bottom: 1px; }
+  .drill-entry dd { margin: 0; font-size: 13px; white-space: pre-wrap; }
+
+  /* ---------- Wanted Board (character design) ---------- */
+  .view-special-topbar { border-bottom: 2px solid var(--color-coral) !important; padding-bottom: 18px !important; }
+  .design-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+  .design-card {
+    background: var(--color-surface); border: 1px solid var(--color-border);
+    border-top: 3px solid var(--color-coral); border-radius: 8px;
+    overflow: hidden; cursor: pointer; display: flex; flex-direction: column;
+  }
+  .design-card:hover { background: var(--color-surface-2); }
+  .design-thumbs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--color-border); }
+  .design-thumbs img { width: 100%; height: 72px; object-fit: cover; display: block; background: var(--color-surface-2); }
+  .design-thumbs.empty { height: 72px; display: flex; align-items: center; justify-content: center; color: var(--color-text-dim); font-size: 12px; background: var(--color-surface-2); }
+  .design-card-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .design-card-body h3 { font-size: 15.5px; }
+  .design-bullets-preview { margin: 0; padding-left: 16px; font-size: 12.5px; color: var(--color-text-dim); }
+  .design-bullets-preview li { margin-bottom: 2px; }
+  .design-card-foot { display: flex; justify-content: space-between; align-items: center; padding: 0 14px 12px 14px; }
+
+  /* ---------- Elo Rankings ---------- */
+  .elo-list { display: flex; flex-direction: column; gap: 9px; max-width: 760px; }
+  .elo-row {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px;
+    padding: 11px 14px; cursor: pointer; transition: background .12s ease;
+  }
+  .elo-row:hover { background: var(--color-surface-2); }
+  .elo-rank {
+    font-family: var(--font-display); font-size: 15px; color: var(--color-text-dim);
+    width: 26px; flex-shrink: 0; text-align: center;
+  }
+  .elo-row:nth-child(1) .elo-rank { color: var(--color-brass); font-weight: 600; }
+  .elo-row:nth-child(2) .elo-rank, .elo-row:nth-child(3) .elo-rank { color: var(--color-text); font-weight: 600; }
+  .elo-main { flex: 1; min-width: 0; }
+  .elo-main h3 { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+  .elo-desc { font-size: 12.5px; color: var(--color-text-dim); overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .elo-score {
+    font-family: var(--font-display); font-size: 19px; font-weight: 600; color: var(--color-tide);
+    flex-shrink: 0; min-width: 60px; text-align: right;
+  }
+
+  /* ---------- Recent activity (dashboard) ---------- */
+  .recent-card {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px;
+    padding: 11px 14px; cursor: pointer; transition: background .12s ease;
+  }
+  .recent-card:hover { background: var(--color-surface-2); }
+  .recent-type-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .recent-main { flex: 1; min-width: 0; }
+  .recent-main .recent-type { font-size: 11px; color: var(--color-text-dim); margin-bottom: 1px; }
+  .recent-main h3 { font-size: 14.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .recent-date { font-size: 11.5px; color: var(--color-text-dim); flex-shrink: 0; }
+
+  /* ---------- Timeline ---------- */
+  .timeline-list { display: flex; flex-direction: column; gap: 0; max-width: 700px; position: relative; }
+  .timeline-row { display: flex; gap: 14px; padding: 0 0 20px 0; position: relative; }
+  .timeline-row::before {
+    content: ""; position: absolute; left: 5px; top: 16px; bottom: 0; width: 1px; background: var(--color-border);
+  }
+  .timeline-row:last-child::before { display: none; }
+  .timeline-dot {
+    width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; margin-top: 4px;
+    border: 2px solid var(--color-bg); box-shadow: 0 0 0 1px var(--color-border);
+  }
+  .timeline-body { flex: 1; min-width: 0; }
+  .timeline-action { font-size: 13.5px; }
+  .timeline-action b { font-weight: 600; }
+  .timeline-meta { font-size: 11.5px; color: var(--color-text-dim); margin-top: 2px; }
+
+  .design-modal { max-width: 640px; }
+  .img-upload-zone {
+    border: 1.5px dashed var(--color-border-strong); border-radius: 8px;
+    padding: 16px; text-align: center; font-size: 12.5px; color: var(--color-text-dim);
+    cursor: pointer; background: var(--color-bg);
+  }
+  .img-upload-zone:hover { background: var(--color-surface-2); }
+  .img-thumb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; margin-top: 10px; }
+  .img-thumb { position: relative; border-radius: 6px; overflow: hidden; border: 1px solid var(--color-border); }
+  .img-thumb img { width: 100%; height: 84px; object-fit: cover; display: block; }
+  .img-thumb .img-remove {
+    position: absolute; top: 3px; right: 3px; background: rgba(15,20,30,0.72); color: #F1E9D2;
+    border: none; border-radius: 5px; width: 20px; height: 20px; font-size: 12px; line-height: 1;
+  }
+  .bullet-row { display: flex; gap: 6px; margin-bottom: 6px; align-items: center; }
+  .bullet-row input { flex: 1; }
+  .bullet-row .icon-btn { flex-shrink: 0; }
+  .add-bullet-btn { margin-top: 2px; }
+
+  @media (max-width: 780px) {
+    .sidebar { width: 72px; padding: 16px 8px; }
+    .brand-text, .nav-item span.label, .theme-toggle span.label, .nav-divider .label, .sync-status .txt, .profile-info { display: none; }
+    .sync-status { justify-content: center; }
+    .profile-panel { justify-content: center; }
+    .profile-panel #logoutBtn { display: none; }
+    .nav-item { justify-content: center; }
+    .theme-toggle { justify-content: center; }
+    .topbar, .view { padding-left: 18px; padding-right: 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="brand" style="justify-content:center; margin-bottom:18px;">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/><path d="M12 12l4-6-6 4-2 6 4-4z" fill="currentColor" stroke="none"/></svg>
+      <div class="brand-text"><strong>The Logbook</strong><span>post-timeskip worldbuilding</span></div>
+    </div>
+    <h2 style="text-align:center; font-size:19px; margin-bottom:4px;">Who's writing today?</h2>
+    <p style="text-align:center; font-size:13px; color:var(--color-text-dim); margin:0 0 20px 0;">A quick profile — no password, just so entries are yours.</p>
+    <div style="display:flex; justify-content:center;">
+      <div class="avatar-upload" id="loginAvatarZone">
+        <img id="loginAvatarPreview" alt="" style="display:none;">
+        <span id="loginAvatarPlaceholder">+</span>
+      </div>
+    </div>
+    <input type="file" id="loginAvatarInput" accept="image/*" style="display:none;">
+    <div class="field"><label for="loginUsernameInput">Username</label><input id="loginUsernameInput" placeholder="e.g. Kaya"></div>
+    <div class="field"><label for="loginDescInput">Description (optional)</label><input id="loginDescInput" placeholder="e.g. Writes the Grand Line arcs"></div>
+    <button class="btn btn-primary" id="loginContinueBtn" style="width:100%; justify-content:center;">Continue</button>
+    <button class="btn btn-ghost hidden" id="loginCancelBtn" style="width:100%; justify-content:center; margin-top:8px;">Cancel</button>
+  </div>
+</div>
+
+<div class="app hidden" id="appRoot">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/><path d="M12 12l4-6-6 4-2 6 4-4z" fill="currentColor" stroke="none"/></svg>
+      <div class="brand-text"><strong>The Logbook</strong><span>post-timeskip worldbuilding</span></div>
+    </div>
+    <nav class="primary-nav" id="primaryNav">
+      <button class="nav-item has-tip" data-tooltip="Deck" data-view="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h14v-9"/></svg><span class="label">Deck</span></button>
+      <button class="nav-item has-tip" data-tooltip="Logbook" data-view="topics"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5c2-1 5-1 7 0v14c-2-1-5-1-7 0V5z"/><path d="M20 5c-2-1-5-1-7 0v14c2-1 5-1 7 0V5z"/></svg><span class="label">Logbook</span></button>
+      <button class="nav-item has-tip nav-item-special" data-tooltip="Wanted Board" data-view="designs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="1"/><circle cx="12" cy="10" r="3"/><path d="M7.5 17c1-2.2 3-3 4.5-3s3.5.8 4.5 3"/></svg><span class="label">Wanted Board</span></button>
+      <button class="nav-item has-tip" data-tooltip="Chart Table" data-view="mindmap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="12" cy="18" r="2.4"/><path d="M8 7l3 9M16 7l-3 9M8.3 5.6h7.4"/></svg><span class="label">Chart Table</span></button>
+      <button class="nav-item has-tip" data-tooltip="Elo Rankings" data-view="elo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V10M12 19V4M20 19v-6"/><path d="M2 19h20"/></svg><span class="label">Elo Rankings</span></button>
+      <button class="nav-item has-tip" data-tooltip="Crow's Nest" data-view="brainstorm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v3M4.2 7l2 1.7M19.8 7l-2 1.7"/><path d="M7 14a5 5 0 0110 0c0 2-1.5 3-2 4.5H9c-.5-1.5-2-2.5-2-4.5z"/><path d="M10 21h4"/></svg><span class="label">Crow's Nest</span></button>
+      <button class="nav-item has-tip" data-tooltip="Ledger Check" data-view="consistency"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M7 6H4l3 6-3 0a3 3 0 006 0zM20 6h-3l3 6-3 0a3 3 0 006 0z"/></svg><span class="label">Ledger Check</span></button>
+      <button class="nav-item has-tip" data-tooltip="Drills" data-view="drills"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.6" fill="currentColor"/></svg><span class="label">Drills</span></button>
+    </nav>
+    <div class="nav-divider"><span class="label">Special</span></div>
+    <nav class="primary-nav secondary-nav">
+      <button class="nav-item has-tip nav-item-special" data-tooltip="Timeline" data-view="timeline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg><span class="label">Timeline</span></button>
+      <button class="nav-item has-tip nav-item-special" data-tooltip="Trash" data-view="trash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/><path d="M10 11v6M14 11v6"/></svg><span class="label">Trash</span></button>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="sync-status local" id="syncStatus"><span class="dot"></span><span class="txt label">Starting…</span></div>
+      <div class="theme-toggle">
+        <span class="label">Theme</span>
+        <div>
+          <button data-theme-choice="light" id="themeLight">Day</button>
+          <button data-theme-choice="dark" id="themeDark">Night</button>
+          <button data-theme-choice="black" id="themeBlack">Black</button>
+        </div>
+      </div>
+      <div class="profile-panel" id="profilePanel" title="Click to edit your profile">
+        <div class="profile-avatar-circle" id="profileAvatarDisplay"></div>
+        <div class="profile-info">
+          <div class="profile-name" id="profileNameDisplay"></div>
+          <div class="profile-desc" id="profileDescDisplay"></div>
+        </div>
+        <button class="icon-btn" id="logoutBtn" title="Log out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <div class="view" id="view-dashboard">
+      <div class="topbar" style="border:none; padding-left:0; padding-right:0; padding-top:0;">
+        <div><h1>The Deck</h1><p class="sub">A captain's overview of everything logged so far for the reimagined post-timeskip arc.</p></div>
+      </div>
+      <div class="stat-row" id="statRow"></div>
+      <div class="dash-section">
+        <h2>Jump in</h2>
+        <div class="quick-links">
+          <button class="quick-link" data-view="topics"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg>Log a new entry</button>
+          <button class="quick-link" data-view="designs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="1"/><circle cx="12" cy="10" r="3"/><path d="M7.5 17c1-2.2 3-3 4.5-3s3.5.8 4.5 3"/></svg>Pin a character design</button>
+          <button class="quick-link" data-view="mindmap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="12" cy="18" r="2.4"/></svg>Open the chart table</button>
+          <button class="quick-link" data-view="elo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V10M12 19V4M20 19v-6"/><path d="M2 19h20"/></svg>Check the Elo rankings</button>
+          <button class="quick-link" data-view="brainstorm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 14a5 5 0 0110 0c0 2-1.5 3-2 4.5H9c-.5-1.5-2-2.5-2-4.5z"/></svg>Spin the crow's nest</button>
+          <button class="quick-link" data-view="drills"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>Run a drill</button>
+        </div>
+      </div>
+      <div class="dash-section">
+        <h2>Backup</h2>
+        <div class="quick-links">
+          <button class="quick-link" id="btnExportBackup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M5 17v2a2 2 0 002 2h10a2 2 0 002-2v-2"/></svg>Download backup</button>
+          <button class="quick-link" id="btnImportBackup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21V9m0 0l-4 4m4-4l4 4"/><path d="M5 7V5a2 2 0 012-2h10a2 2 0 012 2v2"/></svg>Restore from backup</button>
+          <button class="quick-link" id="btnCopyForAI"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><span id="btnCopyForAILabel">Copy for editing code</span></button>
+        </div>
+        <input type="file" id="importFileInput" accept="application/json" style="display:none;">
+      </div>
+      <div class="dash-section">
+        <h2>Recently logged</h2>
+        <div id="recentTopics" class="elo-list"></div>
+      </div>
+    </div>
+
+    <!-- TOPICS -->
+    <div class="view hidden" id="view-topics">
+      <div class="topbar" style="border:none; padding-left:0; padding-right:0; padding-top:0;">
+        <div><h1>Logbook</h1><p class="sub">Characters, plot events, world details — everything worth remembering, in one place.</p></div>
+        <div class="topbar-actions">
+          <button class="btn btn-primary" id="btnNewTopic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>New entry</button>
+        </div>
+      </div>
+      <div class="filter-row">
+        <button class="chip active" data-filter="all">All</button>
+        <button class="chip" data-filter="character">Characters</button>
+        <button class="chip" data-filter="arc">Arcs</button>
+        <button class="chip" data-filter="plot">Timeline &amp; plot</button>
+        <button class="chip" data-filter="world">World &amp; factions</button>
+        <button class="chip" data-filter="other">Other</button>
+        <input class="search-input" id="topicSearch" placeholder="Search title, tags, content…">
+      </div>
+      <div id="topicGrid" class="topic-grid"></div>
+    </div>
+
+    <!-- WANTED BOARD (character design) -->
+    <div class="view hidden" id="view-designs">
+      <div class="topbar view-special-topbar" style="padding-left:0; padding-right:0; padding-top:0;">
+        <div><h1>The Wanted Board</h1><p class="sub">Character design boards — reference images and the details that make a look land. Kept separate from the logbook on purpose.</p></div>
+        <div class="topbar-actions">
+          <button class="btn btn-primary" id="btnNewDesign"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>New design</button>
+        </div>
+      </div>
+      <div class="filter-row">
+        <input class="search-input" id="designSearch" placeholder="Search designs by name, points, or notes…">
+      </div>
+      <div id="designGrid" class="design-grid"></div>
+    </div>
+
+    <!-- MIND MAP -->
+    <div class="view hidden" id="view-mindmap">
+      <div id="mmGalleryWrap">
+        <div class="topbar" style="border:none; padding-left:0; padding-right:0; padding-top:0;">
+          <div><h1>Chart Table</h1><p class="sub">Separate boards for separate webs of ideas — an arc, a power system, a faction map.</p></div>
+          <div class="topbar-actions">
+            <button class="btn btn-primary" id="btnNewMindmap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>New chart table</button>
+          </div>
+        </div>
+        <div id="mmGrid" class="design-grid"></div>
+      </div>
+      <div id="mmEditorWrap" class="hidden">
+        <div class="mm-toolbar">
+          <button class="btn btn-ghost" id="mmBack">&larr; All chart tables</button>
+          <span id="mmBoardName" style="font-family:var(--font-display); font-size:16px; margin-right:auto;"></span>
+          <button class="btn" id="mmRename">Rename</button>
+          <button class="btn btn-danger" id="mmDeleteBoard">Delete board</button>
+        </div>
+        <div class="mm-toolbar">
+          <button class="btn btn-primary" id="mmAddNode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Add node</button>
+          <button class="btn" id="mmLinkMode"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="12" r="2.5"/><path d="M8.5 12h7"/></svg>Connect nodes</button>
+          <div class="mm-zoom">
+            <button class="btn btn-ghost" id="mmZoomOut" title="Zoom out">−</button>
+            <button class="btn btn-ghost" id="mmZoomReset" title="Reset zoom">100%</button>
+            <button class="btn btn-ghost" id="mmZoomIn" title="Zoom in">+</button>
+          </div>
+          <button class="btn btn-ghost" id="mmClear">Clear board</button>
+        </div>
+        <span class="hint" id="mmHint">Drag nodes to arrange. Click a node's dot to change its colour, the ⤢ to resize it. Click an existing line to rename or delete it.</span>
+        <div class="mm-wrap" id="mmWrap">
+          <div class="mm-canvas" id="mmCanvas">
+            <svg class="mm-svg" id="mmSvg"></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ELO RANKINGS -->
+    <div class="view hidden" id="view-elo">
+      <div class="topbar" style="border:none; padding-left:0; padding-right:0; padding-top:0;">
+        <div><h1>Elo Rankings</h1><p class="sub">Rank characters against each other and jot down why — power scaling, popularity, whatever you're tracking.</p></div>
+        <div class="topbar-actions">
+          <button class="btn btn-primary" id="btnNewElo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>New ranking</button>
+        </div>
+      </div>
+      <div class="filter-row">
+        <input class="search-input" id="eloSearch" placeholder="Search characters…">
+      </div>
+      <div class="elo-list" id="eloList"></div>
+    </div>
+
+    <!-- BRAINSTORM -->
+    <div class="view hidden" id="view-brainstorm">
+      <div class="topbar" style="border:none; padding-left:0; padding-right:0; padding-top:0;">
+        <div><h1>Crow's Nest</h1><p class="sub">Free brainstorming, or a guided pass at rewriting something specific.</p></div>
+      </div>
+      <div class="subtabs" id="brainstormSubtabs">
+        <button class="subtab active" data-bstab="spin">Free spin</button>
+        <button class="subtab" data-bstab="rewrite">Rewrite</button>
+      </div>
+      <div id="bs-spin">
+        <div class="cat-filters" id="promptCatFilters"></div>
+        <div class="prompt-box">
+          <div class="prompt-cat" id="promptCat">Character</div>
+          <div class="prompt-text" id="promptText">Click "Spin" to pull a prompt.</div>
+          <div style="display:flex; gap:8px; margin-bottom: 14px;">
+            <button class="btn btn-primary" id="btnSpin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12a9 9 0 11-3-6.7"/><path d="M21 4v5h-5"/></svg>Spin</button>
+          </div>
+          <div class="field">
+            <label for="ideaText">Your thinking</label>
+            <textarea id="ideaText" placeholder="Jot down whatever comes up — half-formed is fine."></textarea>
+          </div>
+          <button class="btn btn-primary" id="btnSaveIdea">Save to logbook</button>
+        </div>
+        <h2 style="font-size:15px; color:var(--color-text-dim); font-weight:500; margin-bottom:10px;">Saved sessions</h2>
+        <div class="idea-list" id="ideaList"></div>
+      </div>
+      <div id="bs-rewrite" class="hidden">
+        <div class="prompt-box" id="rewriteBox"></div>
+        <h2 style="font-size:15px; color:var(--color-text-dim); font-weight:500; margin-bottom:10px;">Past rewrite sessions</h2>
+        <div class="idea-list" id="rewriteList"></div>
+      </div>
+    </div>
+
+    <!-- CONSISTENCY -->
+    <div class="view hidden" id="view-consistency">
+      <div class="topbar" style="border:none; padding-left:0; padding-right:0; padding-top:0;">
+        <div><h1>Ledger Check</h1><p class="sub">Cross-reference entries to catch contradictions before your readers do.</p></div>
+      </div>
+      <div class="subtabs">
+        <button class="subtab active" data-subtab="entities">By tag / entity</button>
+        <button class="subtab" data-subtab="compare">Side by side</button>
+      </div>
+      <div id="consistency-entities">
+        <div id="entityList" class="entity-list"></div>
+      </div>
+      <div id="consistency-compare" class="hidden">
+        <div class="compare-pickers">
+          <select id="compareA"></select>
+          <select id="compareB"></select>
+        </div>
+        <div class="compare-grid">
+          <div class="compare-panel" id="comparePanelA"></div>
+          <div class="compare-panel" id="comparePanelB"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DRILLS -->
+    <div class="view hidden" id="view-drills">
+      <div class="topbar" style="border:none; padding-left:0; padding-right:0; padding-top:0;">
+        <div><h1>Drills</h1><p class="sub">Structured thinking exercises for when a scene, power, or event isn't landing yet.</p></div>
+      </div>
+      <div class="drill-select-row">
+        <div class="field">
+          <label for="drillType">Choose a drill</label>
+          <select id="drillType"></select>
+        </div>
+      </div>
+      <div id="drillFormWrap"></div>
+      <div class="filter-row">
+        <input class="search-input" id="drillSearch" placeholder="Search past runs…">
+      </div>
+      <h2 style="font-size:15px; color:var(--color-text-dim); font-weight:500; margin-bottom:10px;">Past runs</h2>
+      <div class="drill-entries" id="drillEntries"></div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="view hidden" id="view-timeline">
+      <div class="topbar view-special-topbar" style="padding-left:0; padding-right:0; padding-top:0;">
+        <div><h1>Timeline</h1><p class="sub">Every entry you've made, in the order you made it — across the whole logbook.</p></div>
+      </div>
+      <div class="filter-row">
+        <input class="search-input" id="timelineSearch" placeholder="Search the timeline…">
+      </div>
+      <div id="timelineList" class="timeline-list"></div>
+    </div>
+
+    <!-- TRASH -->
+    <div class="view hidden" id="view-trash">
+      <div class="topbar view-special-topbar" style="padding-left:0; padding-right:0; padding-top:0;">
+        <div><h1>Trash</h1><p class="sub">Anything you delete lands here first, so you can bring it back if you change your mind.</p></div>
+        <div class="topbar-actions">
+          <button class="btn btn-danger" id="trashEmptyBtn">Empty trash</button>
+        </div>
+      </div>
+      <div id="trashList" class="idea-list"></div>
+    </div>
+
+  </main>
+</div>
+
+<div class="modal-overlay hidden" id="modalOverlay">
+  <div class="modal design-modal">
+    <h2 id="modalTitle">New entry</h2>
+    <div class="field">
+      <label>Category</label>
+      <div class="cat-picker" id="modalCatPicker"></div>
+    </div>
+    <div class="field">
+      <label for="modalTitleInput">Title</label>
+      <input id="modalTitleInput" placeholder="e.g. Zoro — new blade, new debt">
+    </div>
+    <div class="field">
+      <label for="modalTagsInput">Tags (comma separated)</label>
+      <input id="modalTagsInput" placeholder="e.g. swordsman, east blue, canon-divergent">
+    </div>
+    <div class="field">
+      <label for="modalDateInput">In-story date <span style="font-weight:400; color:var(--color-text-dim);">(optional)</span></label>
+      <input id="modalDateInput" placeholder="e.g. Year 2, Day 14 or anything you use consistently">
+    </div>
+    <div class="field">
+      <label for="modalLinkedDesignInput">Linked Wanted Board design (optional)</label>
+      <select id="modalLinkedDesignInput"><option value="">— None —</option></select>
+    </div>
+    <div class="field">
+      <label for="modalLinkedMindmapInput">Linked Chart Table (optional)</label>
+      <select id="modalLinkedMindmapInput"><option value="">— None —</option></select>
+    </div>
+    <div class="field">
+      <label>Thumbnail image (optional)</label>
+      <div class="img-upload-zone" id="topicThumbZone">Click to upload a thumbnail, or drag one here</div>
+      <input type="file" id="topicThumbInput" accept="image/*" style="display:none;">
+      <div class="img-thumb-grid" id="topicThumbPreview"></div>
+    </div>
+    <div class="field">
+      <label>Sections <span style="font-weight:400; color:var(--color-text-dim);">(split the entry into readable parts — e.g. "Story", "Compared to canon")</span></label>
+      <div class="section-tab-editor" id="sectionTabEditor"></div>
+    </div>
+    <div class="field">
+      <label id="modalContentLabel">Details</label>
+      <div class="rte-toolbar">
+        <button type="button" class="rte-btn" data-cmd="bold" title="Bold"><b>B</b></button>
+        <button type="button" class="rte-btn" data-cmd="italic" title="Italic"><i>I</i></button>
+        <button type="button" class="rte-btn" data-cmd="underline" title="Underline"><u>U</u></button>
+        <button type="button" class="rte-btn" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+        <span class="rte-sep"></span>
+        <button type="button" class="rte-btn rte-size-btn" data-size="3" title="Normal text" style="font-size:11px;">A</button>
+        <button type="button" class="rte-btn rte-size-btn" data-size="5" title="Large text" style="font-size:15px;">A</button>
+        <button type="button" class="rte-btn rte-size-btn" data-size="7" title="Huge text" style="font-size:19px;">A</button>
+        <span class="rte-sep"></span>
+        <button type="button" class="rte-btn rte-hi" data-hi="rgba(255,214,0,0.45)" title="Highlight — yellow" style="--hi:rgba(255,214,0,0.8)"></button>
+        <button type="button" class="rte-btn rte-hi" data-hi="rgba(46,204,113,0.45)" title="Highlight — green" style="--hi:rgba(46,204,113,0.8)"></button>
+        <button type="button" class="rte-btn rte-hi" data-hi="rgba(255,64,129,0.42)" title="Highlight — pink" style="--hi:rgba(255,64,129,0.8)"></button>
+        <button type="button" class="rte-btn rte-hi" data-hi="rgba(41,121,255,0.4)" title="Highlight — blue" style="--hi:rgba(41,121,255,0.8)"></button>
+        <button type="button" class="rte-btn rte-hi" data-hi="rgba(255,140,0,0.42)" title="Highlight — orange" style="--hi:rgba(255,140,0,0.8)"></button>
+        <button type="button" class="rte-btn" data-hi="transparent" title="Remove highlight">⌀</button>
+        <span class="rte-sep"></span>
+        <button type="button" class="rte-btn" data-cmd="insertUnorderedList" title="Bullet list">• ≡</button>
+        <button type="button" class="rte-btn" data-cmd="insertOrderedList" title="Numbered list">1. ≡</button>
+        <button type="button" class="rte-btn" data-cmd="formatBlock" data-value="blockquote" title="Quote">"</button>
+        <span class="rte-sep"></span>
+        <button type="button" class="rte-btn" id="rteLinkBtn" title="Add link">🔗</button>
+        <button type="button" class="rte-btn" id="rteImageBtn" title="Insert image">🖼</button>
+        <button type="button" class="rte-btn" data-cmd="removeFormat" title="Clear formatting">Tx</button>
+      </div>
+      <div class="rte-link-row" id="rteLinkRow">
+        <input type="text" id="rteLinkInput" placeholder="https://…">
+        <button type="button" class="btn btn-primary" id="rteLinkAdd">Add</button>
+        <button type="button" class="btn btn-ghost" id="rteLinkCancel">Cancel</button>
+      </div>
+      <div class="rte-editor" id="modalContentEditor" contenteditable="true" data-placeholder="Everything worth remembering about this. Tip: type [[Entry Title]] to link to another entry."></div>
+      <input type="file" id="rteImageInput" accept="image/*" style="display:none;">
+    </div>
+    <div class="modal-actions">
+      <button class="btn" id="modalCancel">Cancel</button>
+      <button class="btn btn-primary" id="modalSave">Save entry</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="sectionViewOverlay">
+  <div class="modal design-modal">
+    <h2 id="sectionViewTitle">Entry — Section</h2>
+    <div class="rte-editor" id="sectionViewContent" style="max-height:50vh;"></div>
+    <div class="modal-actions">
+      <button class="btn" id="sectionViewCancel">Cancel</button>
+      <button class="btn btn-primary" id="sectionViewEdit">Edit</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="designModalOverlay">
+  <div class="modal design-modal">
+    <h2 id="designModalTitle">New design</h2>
+    <div class="field">
+      <label for="designNameInput">Character name</label>
+      <input id="designNameInput" placeholder="e.g. Nojiko's cousin — the new navigator">
+    </div>
+    <div class="field">
+      <label>Reference images</label>
+      <div class="img-upload-zone" id="imgUploadZone">Click to upload images, or drag them here</div>
+      <input type="file" id="imgFileInput" accept="image/*" multiple style="display:none;">
+      <div class="img-thumb-grid" id="imgThumbGrid"></div>
+    </div>
+    <div class="field">
+      <label>Design bullet points</label>
+      <div id="bulletList"></div>
+      <button class="btn btn-ghost add-bullet-btn" id="addBulletBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;"><path d="M12 5v14M5 12h14"/></svg>Add point</button>
+    </div>
+    <div class="field">
+      <label for="designNotesInput">Notes</label>
+      <textarea id="designNotesInput" placeholder="Anything else about the look, the reasoning behind it, references used…"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-danger" id="designDeleteBtn" style="margin-right:auto;">Delete design</button>
+      <button class="btn" id="designModalCancel">Cancel</button>
+      <button class="btn btn-primary" id="designModalSave">Save design</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="eloModalOverlay">
+  <div class="modal">
+    <h2 id="eloModalTitle">New ranking</h2>
+    <div class="field">
+      <label for="eloNameInput">Character name</label>
+      <input id="eloNameInput" placeholder="e.g. Monkey D. Luffy">
+    </div>
+    <div class="field">
+      <label for="eloScoreInput">Elo</label>
+      <input id="eloScoreInput" type="number" step="1" placeholder="e.g. 2450">
+    </div>
+    <div class="field">
+      <label for="eloDescInput">Description</label>
+      <textarea id="eloDescInput" placeholder="Why this rating — feats, scaling logic, reasoning for the placement…"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-danger" id="eloDeleteBtn" style="margin-right:auto;">Delete</button>
+      <button class="btn" id="eloModalCancel">Cancel</button>
+      <button class="btn btn-primary" id="eloModalSave">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="genericModalOverlay">
+  <div class="modal" id="genericModalBox"></div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- State ---------------- */
+  const STORAGE_KEY = "owb_logbook_v1";
+
+  /* ---------------- Shared database (Supabase) ----------------
+     Fill these in after you create a free Supabase project — see the setup
+     guide. Leave them as-is to keep using this file in local-only mode. */
+  const SUPABASE_URL = "https://cbadagahqunpqnuttgil.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiYWRhZ2FocXVucHFudXR0Z2lsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyNDM0ODAsImV4cCI6MjEwNTgxOTQ4MH0.mWng6VUG30jsNKk02Mvh6hKjCiWo3fmtTGvpYhUJQFI";
+  const SUPABASE_CONFIGURED = !SUPABASE_URL.startsWith("PASTE_") && !SUPABASE_ANON_KEY.startsWith("PASTE_");
+
+  const CATS = {
+    character: { label: "Character", color: "#B04A31" },
+    arc:       { label: "Arcs", color: "#5B4A82" },
+    plot:      { label: "Timeline & plot", color: "#93641F" },
+    world:     { label: "World & factions", color: "#256169" },
+    other:     { label: "Other", color: "#6B4A34" }
+  };
+
+  function defaultState(){
+    return {
+      topics: [],
+      mindmaps: [],
+      ideas: [],
+      drills: [],
+      designs: [],
+      rewrites: [],
+      elo: [],
+      trash: [],
+      purged: []
+    };
+  }
+
+  let state = defaultState();
+
+  function setSyncStatus(kind, text){
+    const el = document.getElementById("syncStatus");
+    if (!el) return;
+    el.className = "sync-status" + (kind ? " " + kind : "");
+    el.querySelector(".txt").textContent = text;
+  }
+
+  function migrateLegacyMindmap(parsed, target){
+    target = target || state;
+    if (parsed && parsed.mindmap && (!parsed.mindmaps || !parsed.mindmaps.length) && (parsed.mindmap.nodes||[]).length) {
+      const now = Date.now();
+      target.mindmaps = [{
+        id: uid(), name: "My Chart Table",
+        nodes: parsed.mindmap.nodes, edges: parsed.mindmap.edges||[],
+        createdAt: now, updatedAt: now
+      }];
+    }
+    delete target.mindmap;
+  }
+
+  function loadLocalCache(){
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        state = Object.assign(defaultState(), parsed);
+        migrateLegacyMindmap(parsed);
+      }
+    } catch(e){ console.error("Could not read local cache:", e); }
+  }
+  function saveLocalCache(){
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e){ /* cache only, ignore */ }
+  }
+
+  /* ---------------- Conflict resolution ----------------
+     Two snapshots of the data (e.g. "what's on this device" and "what's
+     in the shared database", or "current data" and "an imported backup")
+     get combined instead of one blindly replacing the other.
+
+     Per collection (topics, designs, etc.), each item is matched by id.
+     Where an id exists on both sides, whichever copy has the newer
+     updatedAt/createdAt wins — a plain last-write-wins merge at the level
+     of a whole item. If two people edit the very same entry at the same
+     moment, the newer whole edit wins and the older one is lost; fields
+     within one item aren't merged individually.
+
+     Deletions are tracked via trash entries as tombstones: if an item was
+     moved to trash (on either side) more recently than its last edit
+     appears elsewhere, it's treated as deleted and dropped from the
+     merge rather than resurrected.
+
+     Permanently deleting a trash entry ("Delete forever" / "Empty
+     trash") needs its own tombstone too — otherwise a copy of that same
+     entry still sitting in the *other* side's trash (not yet synced)
+     would just get merged back in on the very next save. Each such
+     deletion is recorded in state.purged as {key, purgedAt}, keyed the
+     same way mergeTrash keys a trash entry, and mergeTrash drops any
+     trash entry whose key was purged at or after it was trashed. */
+  function itemTimestamp(item){ return (item && (item.updatedAt || item.createdAt)) || 0; }
+  function trashEntryKey(entry){
+    return entry.type + ":" + (entry.data && entry.data.id ? entry.data.id : entry.id);
+  }
+
+  function mergeCollection(localArr, remoteArr, tombstones){
+    const byId = new Map();
+    (localArr||[]).forEach(it => { if (it && it.id) byId.set(it.id, it); });
+    (remoteArr||[]).forEach(it => {
+      if (!it || !it.id) return;
+      const existing = byId.get(it.id);
+      if (!existing || itemTimestamp(it) > itemTimestamp(existing)) byId.set(it.id, it);
+    });
+    const merged = [];
+    byId.forEach((it, id) => {
+      const tomb = tombstones.get(id);
+      if (tomb !== undefined && tomb >= itemTimestamp(it)) return;
+      merged.push(it);
+    });
+    return merged;
+  }
+
+  function mergePurged(localPurged, remotePurged){
+    const byKey = new Map();
+    [...(localPurged||[]), ...(remotePurged||[])].forEach(p => {
+      if (!p || !p.key) return;
+      const existing = byKey.get(p.key);
+      if (!existing || p.purgedAt > existing.purgedAt) byKey.set(p.key, p);
+    });
+    return [...byKey.values()];
+  }
+
+  function mergeTrash(localTrash, remoteTrash, purgedMap){
+    const byKey = new Map();
+    [...(localTrash||[]), ...(remoteTrash||[])].forEach(te => {
+      if (!te) return;
+      const key = trashEntryKey(te);
+      const existing = byKey.get(key);
+      if (!existing || te.deletedAt > existing.deletedAt) byKey.set(key, te);
+    });
+    const merged = [];
+    byKey.forEach((te, key) => {
+      const purgedAt = purgedMap ? purgedMap.get(key) : undefined;
+      if (purgedAt !== undefined && purgedAt >= te.deletedAt) return;
+      merged.push(te);
+    });
+    return merged;
+  }
+
+  const MERGEABLE_COLLECTIONS = ["topics","mindmaps","ideas","drills","designs","rewrites","elo"];
+
+  function mergeStates(a, b){
+    a = a || defaultState(); b = b || defaultState();
+    const mergedPurged = mergePurged(a.purged, b.purged);
+    const purgedMap = new Map(mergedPurged.map(p => [p.key, p.purgedAt]));
+    const mergedTrash = mergeTrash(a.trash, b.trash, purgedMap);
+    const tombstones = new Map();
+    mergedTrash.forEach(te => {
+      const origId = te.data && te.data.id;
+      if (!origId) return;
+      const prev = tombstones.get(origId);
+      if (prev === undefined || te.deletedAt > prev) tombstones.set(origId, te.deletedAt);
+    });
+    const merged = defaultState();
+    MERGEABLE_COLLECTIONS.forEach(key => {
+      merged[key] = mergeCollection(a[key], b[key], tombstones);
+    });
+    merged.trash = mergedTrash;
+    merged.purged = mergedPurged;
+    return merged;
+  }
+
+  async function apiFetchState(){
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/logbook_state?id=eq.main&select=data`, {
+      headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` }
+    });
+    if (!res.ok) throw new Error("Fetch failed: " + res.status);
+    const rows = await res.json();
+    return rows.length ? rows[0].data : null;
+  }
+  async function apiSaveState(data){
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/logbook_state`, {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        "Content-Type": "application/json", Prefer: "resolution=merge-duplicates,return=minimal"
+      },
+      body: JSON.stringify({ id: "main", data, updated_at: new Date().toISOString() })
+    });
+    if (!res.ok) throw new Error("Save failed: " + res.status);
+  }
+
+  async function load(){
+    if (!SUPABASE_CONFIGURED) {
+      loadLocalCache();
+      setSyncStatus("local", "Local only (this device)");
+      return;
+    }
+    setSyncStatus("", "Connecting…");
+    try {
+      const remote = await apiFetchState();
+      if (remote) {
+        state = Object.assign(defaultState(), remote);
+        migrateLegacyMindmap(remote);
+      } else {
+        state = defaultState();
+        await apiSaveState(state);
+      }
+      saveLocalCache();
+      setSyncStatus("ok", "Synced");
+    } catch(e){
+      console.error("Could not load shared data:", e);
+      loadLocalCache();
+      setSyncStatus("err", "Can't reach the shared database — showing your last local copy");
+    }
+  }
+
+  async function save(opts){
+    opts = opts || {};
+    saveLocalCache();
+    if (!SUPABASE_CONFIGURED) { setSyncStatus("local", "Local only (this device)"); return true; }
+    try {
+      // Merge with whatever's currently in the shared database first, so a
+      // save here doesn't stomp on someone else's change made since our
+      // last fetch. skipMerge is only used for an intentional full
+      // "replace everything" backup restore.
+      if (!opts.skipMerge) {
+        setSyncStatus("", "Syncing…");
+        const remote = await apiFetchState();
+        if (remote) {
+          const merged = mergeStates(state, remote);
+          const changed = JSON.stringify(merged) !== JSON.stringify(state);
+          state = merged;
+          saveLocalCache();
+          if (changed) refreshCurrentView();
+        }
+      }
+      await apiSaveState(state);
+      setSyncStatus("ok", "Synced just now");
+      return true;
+    } catch(e){
+      console.error("Could not save to shared database:", e);
+      setSyncStatus("err", "Save failed — check your connection");
+      showAlert({ title: "Couldn't sync", message: "Your change was saved on this device, but couldn't reach the shared database. Check your internet connection — you may need to redo this change once it's back." });
+      return false;
+    }
+  }
+
+  function userIsTyping(){
+    const el = document.activeElement;
+    if (!el) return false;
+    return el.isContentEditable || el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.tagName === "SELECT";
+  }
+  function anyModalOpen(){
+    return !document.getElementById("modalOverlay").classList.contains("hidden")
+      || !document.getElementById("designModalOverlay").classList.contains("hidden")
+      || !document.getElementById("eloModalOverlay").classList.contains("hidden")
+      || !document.getElementById("genericModalOverlay").classList.contains("hidden");
+  }
+  function refreshCurrentView(){
+    if (!document.getElementById("view-dashboard").classList.contains("hidden")) renderDashboard();
+    else if (!document.getElementById("view-topics").classList.contains("hidden")) renderTopics();
+    else if (!document.getElementById("view-mindmap").classList.contains("hidden")) {
+      if (currentMindmapId && currentBoard()) renderMindmapEditor(); else renderMindmapGallery();
+    }
+    else if (!document.getElementById("view-elo").classList.contains("hidden")) renderElo();
+    else if (!document.getElementById("view-brainstorm").classList.contains("hidden")) { renderIdeas(); renderRewriteList(); }
+    else if (!document.getElementById("view-consistency").classList.contains("hidden")) renderConsistency();
+    else if (!document.getElementById("view-drills").classList.contains("hidden")) renderDrillEntries();
+    else if (!document.getElementById("view-designs").classList.contains("hidden")) renderDesigns();
+    else if (!document.getElementById("view-timeline").classList.contains("hidden")) renderTimeline();
+    else if (!document.getElementById("view-trash").classList.contains("hidden")) renderTrash();
+  }
+  function startPolling(){
+    if (!SUPABASE_CONFIGURED) return;
+    setInterval(async ()=>{
+      if (anyModalOpen() || userIsTyping()) return;
+      try {
+        const remote = await apiFetchState();
+        if (remote) {
+          const merged = mergeStates(state, remote);
+          const changed = JSON.stringify(merged) !== JSON.stringify(state);
+          state = merged;
+          saveLocalCache();
+          if (changed) refreshCurrentView();
+          setSyncStatus("ok", "Synced");
+        }
+      } catch(e){
+        setSyncStatus("err", "Can't reach the shared database");
+      }
+    }, 7000);
+  }
+
+  function uid(){ return Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-4); }
+  function fmtDate(ts){
+    if (!ts) return "";
+    const d = new Date(ts);
+    if (isNaN(d.getTime())) return "";
+    return d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+  }
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  }
+  function htmlToText(html){
+    const div = document.createElement("div");
+    div.innerHTML = html || "";
+    return div.textContent || "";
+  }
+  function topicSections(t){
+    if (Array.isArray(t.sections) && t.sections.length) return t.sections;
+    return [{ id: "legacy", name: "Details", content: t.content || "" }];
+  }
+  function topicSearchText(t){
+    return topicSections(t).map(s=>htmlToText(s.content)).join(" ");
+  }
+
+  /* ---------------- Wiki-style linking: [[Entry Title]] ----------------
+     Scans rendered HTML content for [[Name]] and, if an entry with that
+     exact title exists, turns it into a clickable link to that entry.
+     Runs only at display time — the raw [[...]] text stays intact in the
+     editor so it's easy to edit later. */
+  function linkifyWikiLinks(html){
+    if (!html) return html;
+    return html.replace(/\[\[([^\[\]]+)\]\]/g, (match, rawName)=>{
+      const displayHtml = rawName.trim();
+      if (!displayHtml) return match;
+      const plainName = htmlToText(displayHtml).trim();
+      if (!plainName) return match;
+      const target = state.topics.find(t => (t.title||"").trim().toLowerCase() === plainName.toLowerCase());
+      if (target) {
+        return `<a href="#" class="wiki-link" data-topic-id="${target.id}" title="Open linked entry">${displayHtml}</a>`;
+      }
+      return `<span class="wiki-link wiki-link-missing" title="No entry titled &quot;${escapeHtml(plainName)}&quot; yet">${displayHtml}</span>`;
+    });
+  }
+  document.addEventListener("click", (e)=>{
+    const link = e.target.closest(".wiki-link[data-topic-id]");
+    if (!link) return;
+    e.preventDefault();
+    const t = state.topics.find(t=>t.id===link.dataset.topicId);
+    if (t) openSectionView(t.id, topicSections(t)[0]);
+  });
+
+  /* ---------------- Generic modal (replaces blocked native confirm/alert/prompt) ---------------- */
+  const genericOverlay = document.getElementById("genericModalOverlay");
+  const genericBox = document.getElementById("genericModalBox");
+  function openGenericModal(html){
+    genericBox.innerHTML = html;
+    genericOverlay.classList.remove("hidden");
+  }
+  function closeGenericModal(){
+    genericOverlay.classList.add("hidden");
+    genericBox.innerHTML = "";
+  }
+  genericOverlay.addEventListener("click", e=>{ if (e.target === genericOverlay) closeGenericModal(); });
+
+  function showConfirm({ title="Are you sure?", message="", confirmLabel="Delete", onConfirm }){
+    openGenericModal(`
+      <h2>${escapeHtml(title)}</h2>
+      <p style="font-size:13.5px; color:var(--color-text-dim); margin:0 0 18px 0;">${escapeHtml(message)}</p>
+      <div class="modal-actions">
+        <button class="btn" id="gmCancel">Cancel</button>
+        <button class="btn" id="gmConfirm" style="background:var(--color-coral); border-color:var(--color-coral); color:#fff;">${escapeHtml(confirmLabel)}</button>
+      </div>
+    `);
+    document.getElementById("gmCancel").addEventListener("click", closeGenericModal);
+    document.getElementById("gmConfirm").addEventListener("click", ()=>{ closeGenericModal(); if (onConfirm) onConfirm(); });
+  }
+
+  function showAlert({ title="Notice", message="" }){
+    openGenericModal(`
+      <h2>${escapeHtml(title)}</h2>
+      <p style="font-size:13.5px; color:var(--color-text-dim); margin:0 0 18px 0; white-space:pre-wrap;">${escapeHtml(message)}</p>
+      <div class="modal-actions"><button class="btn btn-primary" id="gmOk">OK</button></div>
+    `);
+    document.getElementById("gmOk").addEventListener("click", closeGenericModal);
+  }
+
+  function showPrompt({ title="Name it", label="Name", initialValue="", confirmLabel="Save", showDelete=false, deleteLabel="Delete", onSave, onDelete }){
+    openGenericModal(`
+      <h2>${escapeHtml(title)}</h2>
+      <div class="field"><label>${escapeHtml(label)}</label><input id="gmInput" value="${escapeHtml(initialValue)}"></div>
+      <div class="modal-actions">
+        ${showDelete ? `<button class="btn btn-danger" id="gmDelete" style="margin-right:auto;">${escapeHtml(deleteLabel)}</button>` : ""}
+        <button class="btn" id="gmCancel2">Cancel</button>
+        <button class="btn btn-primary" id="gmSave">${escapeHtml(confirmLabel)}</button>
+      </div>
+    `);
+    const input = document.getElementById("gmInput");
+    input.focus(); input.select();
+    function doSave(){ const v = input.value.trim(); closeGenericModal(); if (onSave) onSave(v); }
+    input.addEventListener("keydown", e=>{ if (e.key === "Enter") { e.preventDefault(); doSave(); } });
+    document.getElementById("gmSave").addEventListener("click", doSave);
+    document.getElementById("gmCancel2").addEventListener("click", closeGenericModal);
+    if (showDelete) document.getElementById("gmDelete").addEventListener("click", ()=>{ closeGenericModal(); if (onDelete) onDelete(); });
+  }
+
+  function showEditModal({ title="Edit", fields, confirmLabel="Save", onSave }){
+    const fieldsHtml = fields.map(f=>`
+      <div class="field"><label>${escapeHtml(f.label)}</label>${
+        f.type==="textarea"
+          ? `<textarea id="gmField_${f.key}" ${f.rows?`style="min-height:${f.rows*20}px;"`:""}>${escapeHtml(f.value||"")}</textarea>`
+          : `<input id="gmField_${f.key}" value="${escapeHtml(f.value||"")}">`
+      }</div>`).join("");
+    openGenericModal(`
+      <h2>${escapeHtml(title)}</h2>
+      ${fieldsHtml}
+      <div class="modal-actions">
+        <button class="btn" id="gmCancel2">Cancel</button>
+        <button class="btn btn-primary" id="gmSave">${escapeHtml(confirmLabel)}</button>
+      </div>
+    `);
+    function doSave(){
+      const values = {};
+      fields.forEach(f => { values[f.key] = document.getElementById(`gmField_${f.key}`).value.trim(); });
+      closeGenericModal();
+      if (onSave) onSave(values);
+    }
+    document.getElementById("gmSave").addEventListener("click", doSave);
+    document.getElementById("gmCancel2").addEventListener("click", closeGenericModal);
+    const firstField = document.getElementById(`gmField_${fields[0].key}`);
+    if (firstField) { firstField.focus(); if (firstField.select) firstField.select(); }
+  }
+
+  /* ---------------- Trash ---------------- */
+  const TRASH_ARRAY_BY_TYPE = { topic:"topics", design:"designs", mindmap:"mindmaps", rewrite:"rewrites", idea:"ideas", drill:"drills", elo:"elo" };
+  const TRASH_TYPE_LABEL = { topic:"Logbook entry", design:"Wanted Board design", mindmap:"Chart table", rewrite:"Rewrite session", idea:"Brainstorm session", drill:"Drill run", elo:"Elo ranking" };
+  function moveToTrash(type, item){
+    state.trash.push({ id: uid(), type, data: JSON.parse(JSON.stringify(item)), deletedAt: Date.now() });
+  }
+  function trashItemLabel(entry){
+    const d = entry.data;
+    switch(entry.type){
+      case "topic": return d.title || "Untitled entry";
+      case "design": return d.name || "Untitled design";
+      case "mindmap": return d.name || "Untitled chart table";
+      case "rewrite": return d.target || "Untitled rewrite";
+      case "idea": return d.prompt || "Brainstorm note";
+      case "drill": return d.target || "Untitled drill";
+      case "elo": return d.name || "Untitled character";
+      default: return "Item";
+    }
+  }
+  function restoreTrashEntry(id){
+    const entry = state.trash.find(e=>e.id===id);
+    if (!entry) return;
+    const arrName = TRASH_ARRAY_BY_TYPE[entry.type];
+    if (arrName) {
+      if (!Array.isArray(state[arrName])) state[arrName] = [];
+      state[arrName].push(entry.data);
+    }
+    state.trash = state.trash.filter(e=>e.id!==id);
+    save();
+    renderTrash();
+    renderDashboard();
+  }
+  function deleteTrashEntryForever(id){
+    showConfirm({
+      title: "Delete forever?", message: "This item will be permanently removed and can't be recovered.", confirmLabel: "Delete forever",
+      onConfirm: ()=>{
+        const entry = state.trash.find(e=>e.id===id);
+        if (entry) state.purged.push({ key: trashEntryKey(entry), purgedAt: Date.now() });
+        state.trash = state.trash.filter(e=>e.id!==id);
+        save(); renderTrash();
+      }
+    });
+  }
+  function renderTrash(){
+    const list = document.getElementById("trashList");
+    const items = [...state.trash].sort((a,b)=>b.deletedAt-a.deletedAt);
+    document.getElementById("trashEmptyBtn").disabled = !items.length;
+    if (!items.length) {
+      list.innerHTML = `<div class="empty"><h3>Trash is empty</h3><p>Anything you delete shows up here first, so you can bring it back if you change your mind.</p></div>`;
+      return;
+    }
+    list.innerHTML = items.map(entry=>`
+      <div class="idea-card" data-id="${entry.id}">
+        <div class="prompt-ref">${escapeHtml(TRASH_TYPE_LABEL[entry.type]||entry.type)} · deleted ${fmtDate(entry.deletedAt)}</div>
+        <div style="font-family:var(--font-display); font-size:15px; margin-bottom:8px;">${escapeHtml(trashItemLabel(entry))}</div>
+        <div style="display:flex; gap:6px;">
+          <button class="btn btn-primary restore-trash">Restore</button>
+          <button class="btn btn-ghost btn-danger del-forever">Delete forever</button>
+        </div>
+      </div>`).join("");
+    list.querySelectorAll(".restore-trash").forEach(btn=>{
+      btn.addEventListener("click", e=> restoreTrashEntry(e.target.closest(".idea-card").dataset.id));
+    });
+    list.querySelectorAll(".del-forever").forEach(btn=>{
+      btn.addEventListener("click", e=> deleteTrashEntryForever(e.target.closest(".idea-card").dataset.id));
+    });
+  }
+  document.getElementById("trashEmptyBtn").addEventListener("click", ()=>{
+    if (!state.trash.length) return;
+    showConfirm({
+      title: "Empty trash?", message: "Everything in the trash will be permanently deleted. This can't be undone.", confirmLabel: "Empty trash",
+      onConfirm: ()=>{
+        const now = Date.now();
+        state.trash.forEach(entry => state.purged.push({ key: trashEntryKey(entry), purgedAt: now }));
+        state.trash = [];
+        save(); renderTrash();
+      }
+    });
+  });
+
+  /* ---------------- Profile (lightweight local identity, not secure auth) ---------------- */
+  const PROFILE_KEY = "owb_profile";
+  const WELCOME_KEY = "owb_welcomed";
+  let profile = null;
+  let draftLoginAvatar = null;
+
+  function hasSeenWelcome(){
+    try { return localStorage.getItem(WELCOME_KEY) === "1"; } catch(e){ return true; }
+  }
+  function markWelcomeSeen(){
+    try { localStorage.setItem(WELCOME_KEY, "1"); } catch(e){}
+  }
+  function showWelcomeModal(){
+    openGenericModal(`
+      <div style="font-size:14px; line-height:1.6; white-space:pre-wrap; margin-bottom:18px;">If you see this message it means you agreed to help with the production of One Piece Recharted so...
+
+Welcome to One Piece: Recharted!
+
+OP:R is a collaborative rewrite focused on improving the post-timeskip story while keeping the parts of canon we still like.
+This site is where we plan and track everything for it: characters, arcs, world details, and more. all in one place.
+
+Feel free to look at what we wrote/worked on so far!</div>
+      <div class="modal-actions"><button class="btn btn-primary" id="gmWelcomeOk">Got it!</button></div>
+    `);
+    document.getElementById("gmWelcomeOk").addEventListener("click", ()=>{
+      closeGenericModal();
+      markWelcomeSeen();
+    });
+  }
+
+  function loadProfile(){
+    try {
+      const raw = localStorage.getItem(PROFILE_KEY);
+      if (raw) profile = JSON.parse(raw);
+    } catch(e){ profile = null; }
+  }
+  function saveProfile(){
+    try { localStorage.setItem(PROFILE_KEY, JSON.stringify(profile)); } catch(e){ console.error("Could not save profile:", e); }
+  }
+  function avatarColorFor(name){
+    const colors = ["#93641F","#B04A31","#256169","#5B4A82","#6B4A34"];
+    let hash = 0;
+    for (let i=0;i<name.length;i++) hash = name.charCodeAt(i) + ((hash<<5)-hash);
+    return colors[Math.abs(hash) % colors.length];
+  }
+  function renderProfilePanel(){
+    if (!profile) return;
+    const av = document.getElementById("profileAvatarDisplay");
+    if (profile.avatar) {
+      av.style.background = "transparent";
+      av.innerHTML = `<img src="${profile.avatar}" alt="">`;
+    } else {
+      av.style.background = avatarColorFor(profile.username || "?");
+      av.innerHTML = escapeHtml((profile.username || "?").charAt(0).toUpperCase());
+    }
+    document.getElementById("profileNameDisplay").textContent = profile.username || "Anonymous";
+    document.getElementById("profileDescDisplay").textContent = profile.description || "";
+  }
+  function renderLoginAvatarPreview(){
+    const img = document.getElementById("loginAvatarPreview");
+    const placeholder = document.getElementById("loginAvatarPlaceholder");
+    if (draftLoginAvatar) { img.src = draftLoginAvatar; img.style.display = "block"; placeholder.style.display = "none"; }
+    else { img.style.display = "none"; placeholder.style.display = "block"; }
+  }
+  function showLoginScreen(){
+    document.getElementById("appRoot").classList.add("hidden");
+    document.getElementById("loginScreen").classList.remove("hidden");
+    document.getElementById("loginUsernameInput").value = profile ? (profile.username||"") : "";
+    document.getElementById("loginDescInput").value = profile ? (profile.description||"") : "";
+    draftLoginAvatar = profile ? (profile.avatar||null) : null;
+    renderLoginAvatarPreview();
+    document.getElementById("loginContinueBtn").textContent = profile ? "Save changes" : "Continue";
+    document.getElementById("loginCancelBtn").classList.toggle("hidden", !profile);
+    document.getElementById("loginUsernameInput").focus();
+  }
+  function enterApp(){
+    document.getElementById("loginScreen").classList.add("hidden");
+    document.getElementById("appRoot").classList.remove("hidden");
+    renderProfilePanel();
+  }
+
+  document.getElementById("loginAvatarZone").addEventListener("click", ()=> document.getElementById("loginAvatarInput").click());
+  document.getElementById("loginAvatarInput").addEventListener("change", async e=>{
+    const file = e.target.files[0];
+    e.target.value = "";
+    if (!file) return;
+    try { draftLoginAvatar = await resizeAndUploadImage(file, "avatars"); renderLoginAvatarPreview(); }
+    catch(err){ console.error(err); }
+  });
+  document.getElementById("loginContinueBtn").addEventListener("click", ()=>{
+    const username = document.getElementById("loginUsernameInput").value.trim();
+    if (!username) { document.getElementById("loginUsernameInput").focus(); return; }
+    const description = document.getElementById("loginDescInput").value.trim();
+    const isFirstJoin = !profile;
+    profile = { username, description, avatar: draftLoginAvatar };
+    saveProfile();
+    enterApp();
+    if (isFirstJoin && !hasSeenWelcome()) showWelcomeModal();
+  });
+  document.getElementById("loginCancelBtn").addEventListener("click", ()=>{ if (profile) enterApp(); });
+  document.getElementById("profilePanel").addEventListener("click", showLoginScreen);
+  document.getElementById("logoutBtn").addEventListener("click", (e)=>{
+    e.stopPropagation();
+    profile = null;
+    try { localStorage.removeItem(PROFILE_KEY); } catch(err){}
+    showLoginScreen();
+  });
+
+  /* ---------------- Theme ---------------- */
+  function applyTheme(choice){
+    if (choice === "light" || choice === "dark" || choice === "black") {
+      document.documentElement.setAttribute("data-theme", choice);
+    } else {
+      document.documentElement.removeAttribute("data-theme");
+    }
+    document.getElementById("themeLight").classList.toggle("on", choice === "light");
+    document.getElementById("themeDark").classList.toggle("on", choice === "dark");
+    document.getElementById("themeBlack").classList.toggle("on", choice === "black");
+    try { localStorage.setItem("owb_theme", choice || ""); } catch(e){}
+  }
+  document.getElementById("themeLight").addEventListener("click", ()=>applyTheme("light"));
+  document.getElementById("themeDark").addEventListener("click", ()=>applyTheme("dark"));
+  document.getElementById("themeBlack").addEventListener("click", ()=>applyTheme("black"));
+
+  /* ---------------- Navigation ---------------- */
+  const views = ["dashboard","topics","designs","mindmap","elo","brainstorm","consistency","drills","timeline","trash"];
+  function showView(name){
+    views.forEach(v => document.getElementById("view-"+v).classList.toggle("hidden", v !== name));
+    document.querySelectorAll(".nav-item[data-view]").forEach(btn => btn.classList.toggle("active", btn.dataset.view === name));
+    if (name === "dashboard") renderDashboard();
+    if (name === "topics") renderTopics();
+    if (name === "mindmap") {
+      currentMindmapId = null;
+      document.getElementById("mmEditorWrap").classList.add("hidden");
+      document.getElementById("mmGalleryWrap").classList.remove("hidden");
+      renderMindmapGallery();
+    }
+    if (name === "brainstorm") renderBrainstorm();
+    if (name === "consistency") renderConsistency();
+    if (name === "drills") renderDrills();
+    if (name === "designs") renderDesigns();
+    if (name === "elo") renderElo();
+    if (name === "timeline") renderTimeline();
+    if (name === "trash") renderTrash();
+  }
+  document.querySelectorAll("[data-view]").forEach(el => el.addEventListener("click", () => showView(el.dataset.view)));
+
+  /* ================= ACTIVITY (shared by Recently Logged + Timeline) ================= */
+  const ENTRY_TYPE_META = {
+    topic:    { label: "Logbook",      color: "var(--color-coral)", verb: "Logged" },
+    mindmap:  { label: "Chart Table",  color: "var(--color-rope)",  verb: "Created a chart table" },
+    idea:     { label: "Crow's Nest",  color: "var(--color-tide)",  verb: "Wrote a free-spin session" },
+    rewrite:  { label: "Crow's Nest",  color: "var(--color-tide)",  verb: "Ran a rewrite session" },
+    drill:    { label: "Drills",       color: "var(--color-brass)", verb: "Ran a drill" },
+    design:   { label: "Wanted Board", color: "var(--color-coral)", verb: "Pinned a character design" },
+    elo:      { label: "Elo Rankings", color: "var(--color-tide)",  verb: "Ranked" }
+  };
+
+  function collectEntries({ includeElo = true } = {}){
+    const entries = [];
+    state.topics.forEach(t => entries.push({
+      id: t.id, type: "topic", title: t.title || "Untitled entry",
+      ts: t.updatedAt || t.createdAt || 0, createdTs: t.createdAt || t.updatedAt || 0
+    }));
+    state.mindmaps.forEach(m => entries.push({
+      id: m.id, type: "mindmap", title: m.name || "Untitled chart table",
+      ts: m.updatedAt || m.createdAt || 0, createdTs: m.createdAt || m.updatedAt || 0
+    }));
+    state.ideas.forEach(i => entries.push({
+      id: i.id, type: "idea", title: i.prompt || "Free-write session",
+      ts: i.createdAt || 0, createdTs: i.createdAt || 0
+    }));
+    state.rewrites.forEach(r => entries.push({
+      id: r.id, type: "rewrite", title: r.target || "Untitled rewrite",
+      ts: r.createdAt || 0, createdTs: r.createdAt || 0
+    }));
+    state.drills.forEach(d => entries.push({
+      id: d.id, type: "drill", title: d.target || "Untitled drill",
+      ts: d.createdAt || 0, createdTs: d.createdAt || 0
+    }));
+    state.designs.forEach(d => entries.push({
+      id: d.id, type: "design", title: d.name || "Untitled design",
+      ts: d.updatedAt || d.createdAt || 0, createdTs: d.createdAt || d.updatedAt || 0
+    }));
+    if (includeElo) {
+      state.elo.forEach(c => entries.push({
+        id: c.id, type: "elo", title: c.name || "Untitled character",
+        ts: c.updatedAt || c.createdAt || 0, createdTs: c.createdAt || c.updatedAt || 0
+      }));
+    }
+    return entries;
+  }
+
+  function recentCardHtml(e){
+    const meta = ENTRY_TYPE_META[e.type];
+    return `
+      <div class="recent-card" data-id="${e.id}" data-type="${e.type}">
+        <span class="recent-type-dot" style="background:${meta.color}"></span>
+        <div class="recent-main">
+          <div class="recent-type">${escapeHtml(meta.label)}</div>
+          <h3>${escapeHtml(e.title)}</h3>
+        </div>
+        <div class="recent-date">${fmtDate(e.ts)}</div>
+      </div>`;
+  }
+  function bindRecentCardEvents(container){
+    container.querySelectorAll(".recent-card").forEach(card=>{
+      card.addEventListener("click", ()=> openEntryFromCard(card.dataset.type, card.dataset.id));
+    });
+  }
+  function openEntryFromCard(type, id){
+    if (type === "topic") {
+      showView("topics");
+      const t = state.topics.find(x=>x.id===id);
+      if (t) openTopicModal(t);
+    } else if (type === "mindmap") {
+      showView("mindmap");
+      openMindmapBoard(id);
+    } else if (type === "design") {
+      showView("designs");
+      const d = state.designs.find(x=>x.id===id);
+      if (d) openDesignModal(d);
+    } else if (type === "elo") {
+      showView("elo");
+      const c = state.elo.find(x=>x.id===id);
+      if (c) openEloModal(c);
+    } else if (type === "idea") {
+      showView("brainstorm");
+      const tab = document.querySelector('#brainstormSubtabs [data-bstab="spin"]');
+      if (tab) tab.click();
+    } else if (type === "rewrite") {
+      showView("brainstorm");
+      const tab = document.querySelector('#brainstormSubtabs [data-bstab="rewrite"]');
+      if (tab) tab.click();
+    } else if (type === "drill") {
+      showView("drills");
+    }
+  }
+
+  let timelineSearchTerm = "";
+  function renderTimeline(){
+    const list = document.getElementById("timelineList");
+    let items = collectEntries({ includeElo:true }).sort((a,b)=>b.createdTs-a.createdTs);
+    if (timelineSearchTerm.trim()) {
+      const q = timelineSearchTerm.toLowerCase();
+      items = items.filter(e => (e.title||"").toLowerCase().includes(q) || (ENTRY_TYPE_META[e.type].label).toLowerCase().includes(q));
+    }
+    if (!items.length) {
+      list.innerHTML = timelineSearchTerm.trim()
+        ? `<div class="empty"><h3>Nothing matches that search</h3><p>Try a different name or keyword.</p></div>`
+        : `<div class="empty"><h3>Nothing logged yet</h3><p>Once you start adding entries anywhere in the app, they'll show up here in order.</p></div>`;
+      return;
+    }
+    list.innerHTML = items.map(e=>{
+      const meta = ENTRY_TYPE_META[e.type];
+      return `
+        <div class="timeline-row" data-id="${e.id}" data-type="${e.type}">
+          <span class="timeline-dot" style="background:${meta.color}"></span>
+          <div class="timeline-body">
+            <div class="timeline-action">${meta.verb} <b>${escapeHtml(e.title)}</b> in ${escapeHtml(meta.label)}</div>
+            <div class="timeline-meta">${fmtDate(e.createdTs)}</div>
+          </div>
+        </div>`;
+    }).join("");
+    list.querySelectorAll(".timeline-row").forEach(row=>{
+      row.style.cursor = "pointer";
+      row.addEventListener("click", ()=> openEntryFromCard(row.dataset.type, row.dataset.id));
+    });
+  }
+  document.getElementById("timelineSearch").addEventListener("input", e=>{ timelineSearchTerm = e.target.value; renderTimeline(); });
+
+  /* ================= DASHBOARD ================= */
+  function renderDashboard(){
+    const counts = { character:0, arc:0, plot:0, world:0, other:0 };
+    state.topics.forEach(t => { counts[t.category] = (counts[t.category]||0) + 1; });
+    const totalMindmaps = state.mindmaps.length;
+    const statRow = document.getElementById("statRow");
+    statRow.innerHTML = `
+      <div class="stat-card" style="border-left-color:${CATS.character.color}"><div class="n">${counts.character}</div><div class="l">Characters logged</div></div>
+      <div class="stat-card" style="border-left-color:${CATS.arc.color}"><div class="n">${counts.arc}</div><div class="l">Arcs logged</div></div>
+      <div class="stat-card" style="border-left-color:${CATS.plot.color}"><div class="n">${counts.plot}</div><div class="l">Timeline &amp; plot entries</div></div>
+      <div class="stat-card" style="border-left-color:${CATS.world.color}"><div class="n">${counts.world}</div><div class="l">World &amp; faction entries</div></div>
+      <div class="stat-card" style="border-left-color:var(--color-rope)"><div class="n">${totalMindmaps}</div><div class="l">Chart tables created</div></div>
+    `;
+    const recent = document.getElementById("recentTopics");
+    const recentList = collectEntries({ includeElo:false }).sort((a,b)=>b.ts-a.ts).slice(0,5);
+    if (!recentList.length) {
+      recent.innerHTML = `<div class="empty"><h3>Nothing logged yet</h3><p>Start by adding a character, a plot beat, or a piece of the world you're rebuilding after the timeskip.</p><button class="btn btn-primary" onclick="document.getElementById('primaryNav').querySelector('[data-view=topics]').click()">Log your first entry</button></div>`;
+    } else {
+      recent.innerHTML = recentList.map(recentCardHtml).join("");
+      bindRecentCardEvents(recent);
+    }
+  }
+
+  /* ================= TOPICS ================= */
+  let topicFilter = "all";
+  let topicSearchTerm = "";
+
+  function topicCardHtml(t){
+    const cat = CATS[t.category] || CATS.other;
+    const tags = (t.tags||[]).map(tag => `<span class="tag-pill">${escapeHtml(tag)}</span>`).join("");
+    const thumbHtml = t.thumbnail ? `<img class="topic-card-thumb" src="${t.thumbnail}" alt="">` : "";
+    const sections = topicSections(t);
+    const bodyContent = linkifyWikiLinks(sections.length ? sections[0].content : "");
+    const tabsHtml = sections.length > 1
+      ? `<div class="section-tabs" data-topic-id="${t.id}">${sections.map(s=>`<button type="button" class="section-tab-btn" data-section-id="${s.id}">${escapeHtml(s.name)}</button>`).join("")}</div>`
+      : "";
+    const linkedDesign = t.linkedDesignId ? state.designs.find(d=>d.id===t.linkedDesignId) : null;
+    const linkedMindmap = t.linkedMindmapId ? state.mindmaps.find(m=>m.id===t.linkedMindmapId) : null;
+    const linksHtml = (linkedDesign || linkedMindmap) ? `<div class="link-row">
+        ${linkedDesign ? `<button type="button" class="link-pill go-design" data-design-id="${linkedDesign.id}" title="Open on the Wanted Board">🏷 ${escapeHtml(linkedDesign.name||"Untitled design")}</button>` : ""}
+        ${linkedMindmap ? `<button type="button" class="link-pill mm-link go-mindmap" data-mindmap-id="${linkedMindmap.id}" title="Open this chart table">🗺 ${escapeHtml(linkedMindmap.name||"Untitled chart table")}</button>` : ""}
+      </div>` : "";
+    return `
+      <div class="topic-card" style="--cat-color:${cat.color}" data-id="${t.id}">
+        ${thumbHtml}
+        <div class="topic-card-head">
+          <div>
+            <span class="cat-dot" style="background:${cat.color}"></span><span class="cat-label">${cat.label}</span>
+            <h3>${escapeHtml(t.title||"Untitled")}</h3>
+          </div>
+          <div class="card-actions">
+            <button class="icon-btn edit-topic" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/></svg></button>
+            <button class="icon-btn del-topic" title="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button>
+          </div>
+        </div>
+        ${tabsHtml}
+        <div class="body" data-topic-id="${t.id}">${bodyContent}</div>
+        ${linksHtml}
+        <div class="tag-row">${tags}</div>
+        ${t.createdBy ? `<div class="entry-author">by ${escapeHtml(t.createdBy)}</div>` : ""}
+      </div>`;
+  }
+
+  function bindTopicCardEvents(container){
+    container.querySelectorAll(".edit-topic").forEach(btn=>{
+      btn.addEventListener("click", e=>{
+        const id = e.target.closest(".topic-card").dataset.id;
+        openTopicModal(state.topics.find(t=>t.id===id));
+      });
+    });
+    container.querySelectorAll(".del-topic").forEach(btn=>{
+      btn.addEventListener("click", e=>{
+        const id = e.target.closest(".topic-card").dataset.id;
+        showConfirm({
+          title: "Move this entry to trash?", message: "You can restore it later from the Trash.", confirmLabel: "Move to trash",
+          onConfirm: ()=>{
+            const t = state.topics.find(t=>t.id===id);
+            if (t) moveToTrash("topic", t);
+            state.topics = state.topics.filter(t=>t.id!==id);
+            save(); renderTopics(); renderDashboard();
+          }
+        });
+      });
+    });
+    container.querySelectorAll(".go-design").forEach(btn=>{
+      btn.addEventListener("click", e=>{
+        e.stopPropagation();
+        const id = btn.dataset.designId;
+        const d = state.designs.find(d=>d.id===id);
+        if (!d) return;
+        showView("designs");
+        openDesignModal(d);
+      });
+    });
+    container.querySelectorAll(".go-mindmap").forEach(btn=>{
+      btn.addEventListener("click", e=>{
+        e.stopPropagation();
+        const id = btn.dataset.mindmapId;
+        const m = state.mindmaps.find(m=>m.id===id);
+        if (!m) return;
+        showView("mindmap");
+        openMindmapBoard(m.id);
+      });
+    });
+    container.querySelectorAll(".section-tabs").forEach(tabRow=>{
+      const topicId = tabRow.dataset.topicId;
+      const topic = state.topics.find(t=>t.id===topicId);
+      if (!topic) return;
+      const sections = topicSections(topic);
+      tabRow.querySelectorAll(".section-tab-btn").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          const sec = sections.find(s=>s.id===btn.dataset.sectionId);
+          if (sec) openSectionView(topicId, sec);
+        });
+      });
+    });
+  }
+
+  let sectionViewTopicId = null;
+  function openSectionView(topicId, section){
+    sectionViewTopicId = topicId;
+    const topic = state.topics.find(t=>t.id===topicId);
+    document.getElementById("sectionViewTitle").textContent = `${topic ? topic.title : "Entry"} — ${section.name}`;
+    document.getElementById("sectionViewContent").innerHTML = linkifyWikiLinks(section.content) || "<em>(nothing written here yet)</em>";
+    document.getElementById("sectionViewOverlay").classList.remove("hidden");
+  }
+  function closeSectionView(){ document.getElementById("sectionViewOverlay").classList.add("hidden"); sectionViewTopicId = null; }
+  document.getElementById("sectionViewCancel").addEventListener("click", closeSectionView);
+  document.getElementById("sectionViewOverlay").addEventListener("click", e=>{ if (e.target.id === "sectionViewOverlay") closeSectionView(); });
+  document.getElementById("sectionViewEdit").addEventListener("click", ()=>{
+    const topic = state.topics.find(t=>t.id===sectionViewTopicId);
+    closeSectionView();
+    if (topic) openTopicModal(topic);
+  });
+
+  function renderTopics(){
+    const grid = document.getElementById("topicGrid");
+    let list = state.topics;
+    if (topicFilter !== "all") list = list.filter(t => t.category === topicFilter);
+    if (topicSearchTerm.trim()) {
+      const q = topicSearchTerm.toLowerCase();
+      list = list.filter(t =>
+        (t.title||"").toLowerCase().includes(q) ||
+        topicSearchText(t).toLowerCase().includes(q) ||
+        (t.tags||[]).some(tag=>tag.toLowerCase().includes(q))
+      );
+    }
+    list = [...list].sort((a,b)=>b.updatedAt-a.updatedAt);
+    if (!list.length) {
+      grid.innerHTML = `<div class="empty"><h3>No entries here</h3><p>Nothing matches this filter yet. Log a new entry or adjust your search.</p></div>`;
+      return;
+    }
+    grid.innerHTML = list.map(topicCardHtml).join("");
+    bindTopicCardEvents(grid);
+  }
+
+  document.querySelectorAll(".chip[data-filter]").forEach(chip=>{
+    chip.addEventListener("click", ()=>{
+      document.querySelectorAll(".chip[data-filter]").forEach(c=>c.classList.remove("active"));
+      chip.classList.add("active");
+      topicFilter = chip.dataset.filter;
+      renderTopics();
+    });
+  });
+  document.getElementById("topicSearch").addEventListener("input", e=>{
+    topicSearchTerm = e.target.value;
+    renderTopics();
+  });
+
+  /* ---- Topic modal ---- */
+  let editingTopicId = null;
+  let draftTopicThumb = null;
+  let draftSections = [];
+  let activeSectionIndex = 0;
+  const modalOverlay = document.getElementById("modalOverlay");
+  const modalCatPicker = document.getElementById("modalCatPicker");
+  const modalContentEditor = document.getElementById("modalContentEditor");
+  const sectionTabEditor = document.getElementById("sectionTabEditor");
+
+  function buildCatPicker(selected){
+    modalCatPicker.innerHTML = Object.entries(CATS).map(([key,c])=>`
+      <button type="button" class="cat-option${key===selected?" selected":""}" data-cat="${key}" style="--cat-color:${c.color}">
+        <span class="cat-dot" style="background:${c.color}"></span>${c.label}
+      </button>`).join("");
+    modalCatPicker.querySelectorAll(".cat-option").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        modalCatPicker.querySelectorAll(".cat-option").forEach(b=>b.classList.remove("selected"));
+        btn.classList.add("selected");
+      });
+    });
+  }
+
+  function populateLinkedSelects(selectedDesignId, selectedMindmapId){
+    const designSel = document.getElementById("modalLinkedDesignInput");
+    const mmSel = document.getElementById("modalLinkedMindmapInput");
+    const designs = [...state.designs].sort((a,b)=>(a.name||"").localeCompare(b.name||""));
+    const mindmaps = [...state.mindmaps].sort((a,b)=>(a.name||"").localeCompare(b.name||""));
+    designSel.innerHTML = `<option value="">— None —</option>` +
+      designs.map(d=>`<option value="${d.id}">${escapeHtml(d.name||"Untitled design")}</option>`).join("");
+    mmSel.innerHTML = `<option value="">— None —</option>` +
+      mindmaps.map(m=>`<option value="${m.id}">${escapeHtml(m.name||"Untitled chart table")}</option>`).join("");
+    designSel.value = selectedDesignId && designs.some(d=>d.id===selectedDesignId) ? selectedDesignId : "";
+    mmSel.value = selectedMindmapId && mindmaps.some(m=>m.id===selectedMindmapId) ? selectedMindmapId : "";
+  }
+
+  function renderTopicThumbPreview(){
+    const wrap = document.getElementById("topicThumbPreview");
+    wrap.innerHTML = draftTopicThumb
+      ? `<div class="img-thumb"><img src="${draftTopicThumb}" alt=""><button type="button" class="img-remove" id="topicThumbRemove" title="Remove thumbnail">✕</button></div>`
+      : "";
+    const rm = document.getElementById("topicThumbRemove");
+    if (rm) rm.addEventListener("click", ()=>{ draftTopicThumb = null; renderTopicThumbPreview(); });
+  }
+
+  function renderSectionTabEditor(){
+    sectionTabEditor.innerHTML = draftSections.map((s,i)=>`
+      <div class="sec-tab${i===activeSectionIndex?" active":""}" data-idx="${i}">
+        <span class="sec-tab-name">${escapeHtml(s.name)}</span>
+        <button type="button" class="sec-rename" title="Rename section">✎</button>
+        ${draftSections.length>1 ? `<button type="button" class="sec-delete" title="Delete section">✕</button>` : ""}
+      </div>`).join("") + `<button type="button" class="add-section-btn" id="addSectionBtn">+ Add section</button>`;
+
+    sectionTabEditor.querySelectorAll(".sec-tab-name").forEach(el=>{
+      el.addEventListener("click", ()=>{
+        const idx = Number(el.closest(".sec-tab").dataset.idx);
+        switchSection(idx);
+      });
+    });
+    sectionTabEditor.querySelectorAll(".sec-rename").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const idx = Number(btn.closest(".sec-tab").dataset.idx);
+        showPrompt({
+          title: "Rename section", label: "Name", initialValue: draftSections[idx].name, confirmLabel: "Save",
+          onSave: (name)=>{ if (!name) return; draftSections[idx].name = name; renderSectionTabEditor(); }
+        });
+      });
+    });
+    sectionTabEditor.querySelectorAll(".sec-delete").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const idx = Number(btn.closest(".sec-tab").dataset.idx);
+        showConfirm({
+          title: "Delete this section?", message: `"${draftSections[idx].name}" and its text will be removed from this entry.`, confirmLabel: "Delete",
+          onConfirm: ()=>{
+            draftSections.splice(idx,1);
+            if (activeSectionIndex >= draftSections.length) activeSectionIndex = draftSections.length - 1;
+            renderSectionTabEditor();
+            modalContentEditor.innerHTML = draftSections[activeSectionIndex].content;
+            document.getElementById("modalContentLabel").textContent = draftSections[activeSectionIndex].name;
+          }
+        });
+      });
+    });
+    document.getElementById("addSectionBtn").addEventListener("click", ()=>{
+      showPrompt({
+        title: "New section", label: "Section name", initialValue: "", confirmLabel: "Add",
+        onSave: (name)=>{
+          if (!name) return;
+          draftSections[activeSectionIndex].content = modalContentEditor.innerHTML;
+          draftSections.push({ id: uid(), name, content: "" });
+          switchSection(draftSections.length - 1);
+        }
+      });
+    });
+  }
+  function switchSection(idx){
+    draftSections[activeSectionIndex].content = modalContentEditor.innerHTML;
+    activeSectionIndex = idx;
+    modalContentEditor.innerHTML = draftSections[idx].content;
+    document.getElementById("modalContentLabel").textContent = draftSections[idx].name;
+    renderSectionTabEditor();
+  }
+
+  function openTopicModal(topic){
+    editingTopicId = topic ? topic.id : null;
+    document.getElementById("modalTitle").textContent = topic ? "Edit entry" : "New entry";
+    document.getElementById("modalTitleInput").value = topic ? topic.title : "";
+    document.getElementById("modalTagsInput").value = topic ? (topic.tags||[]).join(", ") : "";
+    document.getElementById("modalDateInput").value = topic ? (topic.inStoryDate||"") : "";
+    populateLinkedSelects(topic ? topic.linkedDesignId : null, topic ? topic.linkedMindmapId : null);
+    draftSections = topic
+      ? topicSections(topic).map(s=>({ id: s.id === "legacy" ? uid() : s.id, name: s.name, content: s.content }))
+      : [{ id: uid(), name: "Story", content: "" }];
+    activeSectionIndex = 0;
+    modalContentEditor.innerHTML = draftSections[0].content;
+    document.getElementById("modalContentLabel").textContent = draftSections[0].name;
+    renderSectionTabEditor();
+    draftTopicThumb = topic ? (topic.thumbnail||null) : null;
+    renderTopicThumbPreview();
+    buildCatPicker(topic ? topic.category : "character");
+    modalOverlay.classList.remove("hidden");
+    document.getElementById("rteLinkRow").classList.remove("show");
+    document.getElementById("modalTitleInput").focus();
+  }
+  function closeModal(){ modalOverlay.classList.add("hidden"); editingTopicId = null; }
+
+  document.getElementById("btnNewTopic").addEventListener("click", ()=>openTopicModal(null));
+  document.getElementById("modalCancel").addEventListener("click", closeModal);
+  modalOverlay.addEventListener("click", e=>{ if (e.target === modalOverlay) closeModal(); });
+
+  document.getElementById("modalSave").addEventListener("click", async ()=>{
+    const title = document.getElementById("modalTitleInput").value.trim();
+    if (!title) { document.getElementById("modalTitleInput").focus(); return; }
+    const cat = (modalCatPicker.querySelector(".cat-option.selected")||{}).dataset?.cat || "character";
+    const tags = document.getElementById("modalTagsInput").value.split(",").map(s=>s.trim()).filter(Boolean);
+    const inStoryDate = document.getElementById("modalDateInput").value.trim();
+    const linkedDesignId = document.getElementById("modalLinkedDesignInput").value || null;
+    const linkedMindmapId = document.getElementById("modalLinkedMindmapInput").value || null;
+    draftSections[activeSectionIndex].content = modalContentEditor.innerHTML;
+    const sections = draftSections.map(s=>({ id: s.id, name: s.name, content: s.content }));
+    const thumbnail = draftTopicThumb;
+    const now = Date.now();
+    if (editingTopicId) {
+      const t = state.topics.find(t=>t.id===editingTopicId);
+      Object.assign(t, { title, category: cat, tags, inStoryDate, linkedDesignId, linkedMindmapId, sections, thumbnail, updatedAt: now });
+      delete t.content;
+    } else {
+      state.topics.push({ id: uid(), title, category: cat, tags, inStoryDate, linkedDesignId, linkedMindmapId, sections, thumbnail, createdBy: profile ? profile.username : null, createdAt: now, updatedAt: now });
+    }
+    closeModal(); renderTopics(); renderDashboard();
+    await save();
+  });
+
+  /* -- Topic thumbnail upload -- */
+  const topicThumbZone = document.getElementById("topicThumbZone");
+  const topicThumbInput = document.getElementById("topicThumbInput");
+  topicThumbZone.addEventListener("click", ()=> topicThumbInput.click());
+  topicThumbZone.addEventListener("dragover", e=>{ e.preventDefault(); topicThumbZone.style.background = "var(--color-surface-2)"; });
+  topicThumbZone.addEventListener("dragleave", ()=>{ topicThumbZone.style.background = ""; });
+  topicThumbZone.addEventListener("drop", async e=>{
+    e.preventDefault(); topicThumbZone.style.background = "";
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith("image/")) {
+      try { draftTopicThumb = await resizeAndUploadImage(file, "thumbnails"); renderTopicThumbPreview(); } catch(err){ console.error(err); }
+    }
+  });
+  topicThumbInput.addEventListener("change", async e=>{
+    const file = e.target.files[0];
+    topicThumbInput.value = "";
+    if (file) {
+      try { draftTopicThumb = await resizeAndUploadImage(file, "thumbnails"); renderTopicThumbPreview(); } catch(err){ console.error(err); }
+    }
+  });
+
+  /* -- Rich text toolbar -- */
+  let rteSavedRange = null;
+  function rteSaveRange(){
+    const sel = window.getSelection();
+    if (sel.rangeCount && modalContentEditor.contains(sel.anchorNode)) rteSavedRange = sel.getRangeAt(0).cloneRange();
+  }
+  function rteRestoreRange(){
+    modalContentEditor.focus();
+    if (rteSavedRange) {
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(rteSavedRange);
+    }
+  }
+  modalContentEditor.addEventListener("mouseup", rteSaveRange);
+  modalContentEditor.addEventListener("keyup", rteSaveRange);
+
+  document.querySelectorAll(".rte-toolbar .rte-btn").forEach(btn=>{
+    btn.addEventListener("mousedown", e=> e.preventDefault());
+  });
+  document.querySelectorAll(".rte-toolbar .rte-btn[data-cmd]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      modalContentEditor.focus();
+      const cmd = btn.dataset.cmd;
+      if (cmd === "formatBlock") {
+        document.execCommand("formatBlock", false, btn.dataset.value);
+      } else {
+        document.execCommand(cmd, false, null);
+      }
+    });
+  });
+  document.querySelectorAll(".rte-toolbar .rte-size-btn").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      modalContentEditor.focus();
+      document.execCommand("fontSize", false, btn.dataset.size);
+    });
+  });
+  document.querySelectorAll(".rte-toolbar [data-hi]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      modalContentEditor.focus();
+      document.execCommand("styleWithCSS", false, true);
+      document.execCommand("hiliteColor", false, btn.dataset.hi);
+    });
+  });
+
+  const rteLinkBtn = document.getElementById("rteLinkBtn");
+  const rteLinkRow = document.getElementById("rteLinkRow");
+  const rteLinkInput = document.getElementById("rteLinkInput");
+  rteLinkBtn.addEventListener("mousedown", e=>{ e.preventDefault(); rteSaveRange(); });
+  rteLinkBtn.addEventListener("click", ()=>{
+    rteLinkRow.classList.add("show");
+    rteLinkInput.value = "";
+    rteLinkInput.focus();
+  });
+  document.getElementById("rteLinkCancel").addEventListener("click", ()=> rteLinkRow.classList.remove("show"));
+  document.getElementById("rteLinkAdd").addEventListener("click", ()=>{
+    const url = rteLinkInput.value.trim();
+    rteLinkRow.classList.remove("show");
+    if (!url) return;
+    rteRestoreRange();
+    document.execCommand("createLink", false, /^https?:\/\//.test(url) ? url : "https://" + url);
+  });
+
+  const rteImageBtn = document.getElementById("rteImageBtn");
+  const rteImageInput = document.getElementById("rteImageInput");
+  rteImageBtn.addEventListener("mousedown", e=>{ e.preventDefault(); rteSaveRange(); });
+  rteImageBtn.addEventListener("click", ()=> rteImageInput.click());
+  rteImageInput.addEventListener("change", async e=>{
+    const file = e.target.files[0];
+    rteImageInput.value = "";
+    if (!file) return;
+    try {
+      const dataUrl = await resizeAndUploadImage(file, "inline");
+      rteRestoreRange();
+      document.execCommand("insertImage", false, dataUrl);
+    } catch(err){ console.error(err); }
+  });
+
+  /* ================= MIND MAP (Chart Table) ================= */
+  const nodeColors = ["#93641F","#B04A31","#256169","#6B4A34"];
+  let linkMode = false;
+  let linkSource = null;
+  let currentMindmapId = null;
+  let mmZoom = 1;
+
+  function currentBoard(){ return state.mindmaps.find(m=>m.id===currentMindmapId); }
+  function touchBoard(m){ m.updatedAt = Date.now(); }
+
+  function renderMindmapGallery(){
+    const grid = document.getElementById("mmGrid");
+    const list = [...state.mindmaps].sort((a,b)=>b.updatedAt-a.updatedAt);
+    if (!list.length) {
+      grid.innerHTML = `<div class="empty"><h3>No chart tables yet</h3><p>Start one for an arc, a power system, or a web of alliances.</p><button class="btn btn-primary" id="emptyNewMindmap">New chart table</button></div>`;
+      document.getElementById("emptyNewMindmap").addEventListener("click", createMindmapPrompt);
+      return;
+    }
+    grid.innerHTML = list.map(m=>`
+      <div class="mm-board-card" data-id="${m.id}">
+        <div class="card-actions mm-card-actions">
+          <button class="icon-btn edit-mm" title="Rename"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/></svg></button>
+          <button class="icon-btn del-mm" title="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button>
+        </div>
+        <h3>${escapeHtml(m.name)}</h3>
+        <div class="meta">${m.nodes.length} node${m.nodes.length===1?"":"s"} · ${m.edges.length} connection${m.edges.length===1?"":"s"}</div>
+        <div class="meta">Updated ${fmtDate(m.updatedAt)}</div>
+      </div>`).join("");
+    grid.querySelectorAll(".mm-board-card").forEach(card=>{
+      card.addEventListener("click", ()=> openMindmapBoard(card.dataset.id));
+    });
+    grid.querySelectorAll(".edit-mm").forEach(btn=>{
+      btn.addEventListener("click", e=>{
+        e.stopPropagation();
+        const id = e.target.closest(".mm-board-card").dataset.id;
+        const m = state.mindmaps.find(m=>m.id===id);
+        if (!m) return;
+        showPrompt({
+          title: "Rename chart table", label: "Name", initialValue: m.name, confirmLabel: "Save",
+          onSave: (name)=>{ if (!name) return; m.name = name; touchBoard(m); save(); renderMindmapGallery(); }
+        });
+      });
+    });
+    grid.querySelectorAll(".del-mm").forEach(btn=>{
+      btn.addEventListener("click", e=>{
+        e.stopPropagation();
+        const id = e.target.closest(".mm-board-card").dataset.id;
+        showConfirm({
+          title: "Move this chart table to trash?", message: "All its nodes and connections move with it. You can restore it later from the Trash.", confirmLabel: "Move to trash",
+          onConfirm: ()=>{
+            const m = state.mindmaps.find(m=>m.id===id);
+            if (m) moveToTrash("mindmap", m);
+            state.mindmaps = state.mindmaps.filter(m=>m.id!==id);
+            save(); renderMindmapGallery(); renderDashboard();
+          }
+        });
+      });
+    });
+  }
+
+  function createMindmapPrompt(){
+    showPrompt({
+      title: "New chart table", label: "Name", confirmLabel: "Create",
+      onSave: (name)=>{
+        if (!name) return;
+        const now = Date.now();
+        const m = { id: uid(), name, nodes: [], edges: [], createdAt: now, updatedAt: now };
+        state.mindmaps.push(m);
+        save();
+        renderMindmapGallery();
+        openMindmapBoard(m.id);
+      }
+    });
+  }
+  document.getElementById("btnNewMindmap").addEventListener("click", createMindmapPrompt);
+
+  function openMindmapBoard(id){
+    currentMindmapId = id;
+    mmZoom = 1;
+    linkMode = false; linkSource = null;
+    document.getElementById("mmLinkMode").classList.remove("btn-primary");
+    document.getElementById("mmHint").textContent = "Drag nodes to arrange. Click a node's dot to change its colour, the ⤢ to resize it. Click an existing line to rename or delete it.";
+    document.getElementById("mmGalleryWrap").classList.add("hidden");
+    document.getElementById("mmEditorWrap").classList.remove("hidden");
+    const m = currentBoard();
+    document.getElementById("mmBoardName").textContent = m.name;
+    setZoom(1);
+    renderMindmapEditor();
+  }
+  function backToGallery(){
+    currentMindmapId = null;
+    document.getElementById("mmEditorWrap").classList.add("hidden");
+    document.getElementById("mmGalleryWrap").classList.remove("hidden");
+    renderMindmapGallery();
+    renderDashboard();
+  }
+  document.getElementById("mmBack").addEventListener("click", backToGallery);
+  document.getElementById("mmRename").addEventListener("click", ()=>{
+    const m = currentBoard(); if (!m) return;
+    showPrompt({
+      title: "Rename chart table", label: "Name", initialValue: m.name, confirmLabel: "Save",
+      onSave: (name)=>{ if (!name) return; m.name = name; touchBoard(m); save(); document.getElementById("mmBoardName").textContent = name; }
+    });
+  });
+  document.getElementById("mmDeleteBoard").addEventListener("click", ()=>{
+    if (!currentMindmapId) return;
+    showConfirm({
+      title: "Move this chart table to trash?", message: "All its nodes and connections move with it. You can restore it later from the Trash.", confirmLabel: "Move to trash",
+      onConfirm: ()=>{
+        const m = currentBoard();
+        if (m) moveToTrash("mindmap", m);
+        state.mindmaps = state.mindmaps.filter(m=>m.id!==currentMindmapId);
+        save(); backToGallery();
+      }
+    });
+  });
+
+  function setZoom(z){
+    mmZoom = Math.max(0.5, Math.min(2, Math.round(z*10)/10));
+    document.getElementById("mmCanvas").style.transform = `scale(${mmZoom})`;
+    document.getElementById("mmZoomReset").textContent = Math.round(mmZoom*100)+"%";
+    drawEdges();
+  }
+  document.getElementById("mmZoomIn").addEventListener("click", ()=> setZoom(mmZoom+0.1));
+  document.getElementById("mmZoomOut").addEventListener("click", ()=> setZoom(mmZoom-0.1));
+  document.getElementById("mmZoomReset").addEventListener("click", ()=> setZoom(1));
+
+  function drawEdges(){
+    const m = currentBoard(); if (!m) return;
+    const canvas = document.getElementById("mmCanvas");
+    const svg = document.getElementById("mmSvg");
+    svg.setAttribute("viewBox", `0 0 ${canvas.offsetWidth} ${canvas.offsetHeight}`);
+    const elById = {};
+    canvas.querySelectorAll(".mm-node").forEach(el=>{ elById[el.dataset.id] = el; });
+    svg.innerHTML = m.edges.map(edge=>{
+      const aEl = elById[edge.from], bEl = elById[edge.to];
+      if (!aEl || !bEl) return "";
+      const ax = aEl.offsetLeft + aEl.offsetWidth/2, ay = aEl.offsetTop + aEl.offsetHeight/2;
+      const bx = bEl.offsetLeft + bEl.offsetWidth/2, by = bEl.offsetTop + bEl.offsetHeight/2;
+      const mx = (ax+bx)/2, my = (ay+by)/2;
+      return `<g class="mm-edge" data-id="${edge.id}" style="pointer-events:auto; cursor:pointer;">
+        <line x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}" stroke="var(--color-border-strong)" stroke-width="2"/>
+        ${edge.label ? `<rect x="${mx-40}" y="${my-11}" width="80" height="20" fill="var(--color-surface)" stroke="var(--color-border)"/><text x="${mx}" y="${my+4}" text-anchor="middle" font-size="11" fill="var(--color-text)" font-family="Work Sans, sans-serif">${escapeHtml(edge.label).slice(0,14)}</text>` : `<circle cx="${mx}" cy="${my}" r="7" fill="var(--color-surface)" stroke="var(--color-border-strong)"/>`}
+      </g>`;
+    }).join("");
+    svg.querySelectorAll(".mm-edge").forEach(g=>{
+      g.addEventListener("click", ()=>{
+        const edge = m.edges.find(e=>e.id===g.dataset.id);
+        showPrompt({
+          title: "Connection label", label: "Label (optional)", initialValue: edge.label||"", confirmLabel: "Save",
+          showDelete: true, deleteLabel: "Remove connection",
+          onSave: (val)=>{ edge.label = val; touchBoard(m); save(); renderMindmapEditor(); },
+          onDelete: ()=>{ m.edges = m.edges.filter(e=>e.id!==edge.id); touchBoard(m); save(); renderMindmapEditor(); }
+        });
+      });
+    });
+  }
+
+  function renderMindmapEditor(){
+    const m = currentBoard(); if (!m) return;
+    const canvas = document.getElementById("mmCanvas");
+    canvas.querySelectorAll(".mm-node").forEach(n=>n.remove());
+
+    m.nodes.forEach(node=>{
+      if (!node.size) node.size = "normal";
+      const el = document.createElement("div");
+      el.className = "mm-node" + (node.size !== "normal" ? " mm-node--"+node.size : "");
+      el.style.left = node.x + "px";
+      el.style.top = node.y + "px";
+      el.style.setProperty("--node-color", node.color || nodeColors[0]);
+      el.dataset.id = node.id;
+      el.innerHTML = `
+        <div class="mm-controls">
+          <button class="mm-dot" title="Change colour"></button>
+          <div class="mm-controls-right">
+            <button class="mm-size" title="Resize node">⤢</button>
+            <button class="mm-del" title="Delete node">✕</button>
+          </div>
+        </div>
+        <div class="mm-text" contenteditable="true" spellcheck="false">${escapeHtml(node.text)}</div>
+      `;
+      canvas.appendChild(el);
+
+      let dragging=false, grabX=0, grabY=0;
+      el.addEventListener("pointerdown", e=>{
+        if (e.target.closest(".mm-text") || e.target.closest(".mm-dot") || e.target.closest(".mm-size") || e.target.closest(".mm-del")) return;
+        if (linkMode) return;
+        dragging = true; el.setPointerCapture(e.pointerId);
+        const rect = canvas.getBoundingClientRect();
+        grabX = (e.clientX - rect.left)/mmZoom - node.x;
+        grabY = (e.clientY - rect.top)/mmZoom - node.y;
+        el.style.cursor = "grabbing";
+      });
+      el.addEventListener("pointermove", e=>{
+        if (!dragging) return;
+        const rect = canvas.getBoundingClientRect();
+        node.x = Math.max(0, (e.clientX - rect.left)/mmZoom - grabX);
+        node.y = Math.max(0, (e.clientY - rect.top)/mmZoom - grabY);
+        el.style.left = node.x+"px"; el.style.top = node.y+"px";
+        drawEdges();
+      });
+      el.addEventListener("pointerup", ()=>{ if (dragging){ dragging=false; el.style.cursor="grab"; touchBoard(m); save(); } });
+
+      el.querySelector(".mm-text").addEventListener("blur", e=>{
+        node.text = e.target.textContent.trim() || "Untitled idea";
+        touchBoard(m); save();
+      });
+      el.querySelector(".mm-del").addEventListener("click", ()=>{
+        m.nodes = m.nodes.filter(n=>n.id!==node.id);
+        m.edges = m.edges.filter(ed=>ed.from!==node.id && ed.to!==node.id);
+        touchBoard(m); save(); renderMindmapEditor();
+      });
+      el.querySelector(".mm-dot").addEventListener("click", ()=>{
+        const idx = nodeColors.indexOf(node.color);
+        node.color = nodeColors[(idx+1) % nodeColors.length];
+        el.style.setProperty("--node-color", node.color);
+        touchBoard(m); save();
+      });
+      el.querySelector(".mm-size").addEventListener("click", ()=>{
+        const order = ["normal","large","huge"];
+        const idx = order.indexOf(node.size||"normal");
+        node.size = order[(idx+1) % order.length];
+        el.className = "mm-node" + (node.size !== "normal" ? " mm-node--"+node.size : "");
+        touchBoard(m); save(); drawEdges();
+      });
+      el.addEventListener("click", ()=>{
+        if (!linkMode) return;
+        if (!linkSource) {
+          linkSource = node.id; el.classList.add("linking-src");
+        } else if (linkSource !== node.id) {
+          m.edges.push({ id: uid(), from: linkSource, to: node.id, label: "" });
+          touchBoard(m); save();
+          document.querySelectorAll(".mm-node.linking-src").forEach(n=>n.classList.remove("linking-src"));
+          linkSource = null;
+          renderMindmapEditor();
+        }
+      });
+    });
+
+    drawEdges();
+  }
+  window.addEventListener("resize", ()=>{ if (currentMindmapId) drawEdges(); });
+
+  document.getElementById("mmAddNode").addEventListener("click", ()=>{
+    const m = currentBoard(); if (!m) return;
+    const wrap = document.getElementById("mmWrap");
+    m.nodes.push({
+      id: uid(), text: "New idea",
+      x: 60 + wrap.scrollLeft/mmZoom + Math.random()*160,
+      y: 60 + wrap.scrollTop/mmZoom + Math.random()*120,
+      color: nodeColors[m.nodes.length % nodeColors.length],
+      size: "normal"
+    });
+    touchBoard(m); save(); renderMindmapEditor();
+  });
+  document.getElementById("mmLinkMode").addEventListener("click", (e)=>{
+    linkMode = !linkMode;
+    linkSource = null;
+    e.target.closest("button").classList.toggle("btn-primary", linkMode);
+    document.querySelectorAll(".mm-node.linking-src").forEach(n=>n.classList.remove("linking-src"));
+    document.getElementById("mmHint").textContent = linkMode
+      ? "Connect mode: click a node, then click another to link them."
+      : "Drag nodes to arrange. Click a node's dot to change its colour, the ⤢ to resize it. Click an existing line to rename or delete it.";
+  });
+  document.getElementById("mmClear").addEventListener("click", ()=>{
+    const m = currentBoard(); if (!m || !m.nodes.length) return;
+    showConfirm({
+      title: "Clear this chart table?", message: "All nodes and connections on this board will be removed.", confirmLabel: "Clear",
+      onConfirm: ()=>{ m.nodes = []; m.edges = []; touchBoard(m); save(); renderMindmapEditor(); renderDashboard(); }
+    });
+  });
+
+  /* ================= BRAINSTORM ================= */
+  const PROMPTS = {
+    Character: [
+      "What would this character do if they lost the thing they value most?",
+      "What contradiction exists between how this character sees themselves and how others see them?",
+      "What's a fear this character hasn't confronted yet?",
+      "Who does this character owe something to, and what happens if it comes due?",
+      "What would this character never say out loud, even to their crew?"
+    ],
+    "Plot": [
+      "What's the worst possible moment for your next big reveal to land?",
+      "What if the antagonist succeeded halfway before anyone could stop them?",
+      "What decision could a character make that costs them a relationship?",
+      "What's a promise made earlier that's about to become inconvenient?",
+      "What happens if the plan works perfectly but for the wrong reason?"
+    ],
+    "World": [
+      "What does daily life look like for someone with no powers in this world?",
+      "What resource or belief would two factions actually go to war over?",
+      "How does this location change between calm weather and a storm?",
+      "What's a rule of this world that everyone follows but nobody questions?",
+      "Who profits when the crew's actions destabilize a region?"
+    ],
+    "Power / Combat": [
+      "What's a weakness in this power that's never been tested on-screen?",
+      "How would this ability fail catastrophically under pressure?",
+      "What non-combat use could this power have that nobody's tried?",
+      "What would it cost this character to use their power at full strength?",
+      "How does this power look different fighting an equal versus a crowd?"
+    ]
+  };
+  let promptCatFilter = "all";
+  let currentPrompt = null;
+
+  function renderBrainstorm(){
+    const filters = document.getElementById("promptCatFilters");
+    const cats = ["all", ...Object.keys(PROMPTS)];
+    filters.innerHTML = cats.map(c=>`<button class="chip${c===promptCatFilter?" active":""}" data-pcat="${c}">${c==="all"?"All categories":c}</button>`).join("");
+    filters.querySelectorAll("[data-pcat]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        promptCatFilter = btn.dataset.pcat;
+        renderBrainstorm();
+      });
+    });
+    renderIdeas();
+  }
+  function spinPrompt(){
+    const cats = promptCatFilter === "all" ? Object.keys(PROMPTS) : [promptCatFilter];
+    const cat = cats[Math.floor(Math.random()*cats.length)];
+    const list = PROMPTS[cat];
+    const text = list[Math.floor(Math.random()*list.length)];
+    currentPrompt = { cat, text };
+    document.getElementById("promptCat").textContent = cat;
+    document.getElementById("promptText").textContent = text;
+  }
+  document.getElementById("btnSpin").addEventListener("click", spinPrompt);
+  document.getElementById("btnSaveIdea").addEventListener("click", ()=>{
+    const notes = document.getElementById("ideaText").value.trim();
+    if (!currentPrompt && !notes) return;
+    state.ideas.push({
+      id: uid(),
+      prompt: currentPrompt ? currentPrompt.text : "(free write)",
+      cat: currentPrompt ? currentPrompt.cat : "Other",
+      notes,
+      createdAt: Date.now()
+    });
+    document.getElementById("ideaText").value = "";
+    save(); renderIdeas();
+  });
+  function renderIdeas(){
+    const list = document.getElementById("ideaList");
+    const items = [...state.ideas].sort((a,b)=>b.createdAt-a.createdAt);
+    if (!items.length) {
+      list.innerHTML = `<div class="empty"><h3>No sessions saved yet</h3><p>Spin a prompt, write down what comes up, and save it here.</p></div>`;
+      return;
+    }
+    list.innerHTML = items.map(idea=>`
+      <div class="idea-card" data-id="${idea.id}">
+        <div class="prompt-ref">${escapeHtml(idea.cat)} · ${fmtDate(idea.createdAt)}</div>
+        <div style="font-family:var(--font-display); font-size:14.5px; margin-bottom:6px;">${escapeHtml(idea.prompt)}</div>
+        <div style="font-size:13px; white-space:pre-wrap; color:var(--color-text-dim);">${escapeHtml(idea.notes||"(no notes written)")}</div>
+        <div style="display:flex; gap:6px; margin-top:8px;">
+          <button class="btn btn-ghost promote-idea">Turn into logbook entry</button>
+          <button class="btn btn-ghost edit-idea">Edit</button>
+          <button class="btn btn-ghost btn-danger del-idea">Delete</button>
+        </div>
+      </div>`).join("");
+    list.querySelectorAll(".edit-idea").forEach(btn=>{
+      btn.addEventListener("click", e=>{
+        const id = e.target.closest(".idea-card").dataset.id;
+        const idea = state.ideas.find(i=>i.id===id);
+        if (!idea) return;
+        showEditModal({
+          title: "Edit brainstorm session",
+          fields: [
+            { key:"prompt", label:"Prompt", value: idea.prompt },
+            { key:"notes", label:"Notes", type:"textarea", rows:6, value: idea.notes||"" }
+          ],
+          onSave: (values)=>{
+            idea.prompt = values.prompt || idea.prompt;
+            idea.notes = values.notes;
+            save(); renderIdeas();
+          }
+        });
+      });
+    });
+    list.querySelectorAll(".del-idea").forEach(btn=>{
+      btn.addEventListener("click", e=>{
+        const id = e.target.closest(".idea-card").dataset.id;
+        const idea = state.ideas.find(i=>i.id===id);
+        if (idea) moveToTrash("idea", idea);
+        state.ideas = state.ideas.filter(i=>i.id!==id);
+        save(); renderIdeas();
+      });
+    });
+    list.querySelectorAll(".promote-idea").forEach(btn=>{
+      btn.addEventListener("click", e=>{
+        const id = e.target.closest(".idea-card").dataset.id;
+        const idea = state.ideas.find(i=>i.id===id);
+        const now = Date.now();
+        state.topics.push({
+          id: uid(), title: idea.prompt.slice(0,60), category: "other",
+          tags: ["brainstorm", idea.cat.toLowerCase()],
+          sections: [{ id: uid(), name: "Notes", content: escapeHtml(idea.notes||"") }],
+          createdBy: profile ? profile.username : null,
+          createdAt: now, updatedAt: now
+        });
+        save();
+        showAlert({ title: "Added to your logbook", message: 'Saved under the "Other" category.' });
+      });
+    });
+  }
+
+  /* ================= REWRITE (Crow's Nest) ================= */
+  const REWRITE_QUESTIONS = [
+    "What are you rewriting? (a scene, a decision, a relationship, an event)",
+    "What does canon do here that isn't working for your version?",
+    "What's pulling you toward changing it?",
+    "What's your instinct for the alternative — even roughly?",
+    "What would a reader who loves canon push back on, and how would you answer that?",
+    "What else does this change ripple into — which other scenes, characters or arcs does it touch?",
+    "What do you want to keep from the original, despite the change?"
+  ];
+  let rewriteStep = 0;
+  let rewriteAnswers = REWRITE_QUESTIONS.map(()=> "");
+  let rewriteActive = false;
+
+  function renderRewriteBox(){
+    const box = document.getElementById("rewriteBox");
+    if (!rewriteActive) {
+      box.innerHTML = `
+        <div class="prompt-cat">Rewrite</div>
+        <div class="prompt-text">Answer a short set of questions to think a change through before you write it.</div>
+        <button class="btn btn-primary" id="startRewriteBtn">Start a rewrite session</button>
+      `;
+      document.getElementById("startRewriteBtn").addEventListener("click", ()=>{
+        rewriteActive = true; rewriteStep = 0; rewriteAnswers = REWRITE_QUESTIONS.map(()=>"");
+        renderRewriteBox();
+      });
+      return;
+    }
+    box.innerHTML = `
+      <div class="prompt-cat">Question ${rewriteStep+1} of ${REWRITE_QUESTIONS.length}</div>
+      <div class="prompt-text">${escapeHtml(REWRITE_QUESTIONS[rewriteStep])}</div>
+      <div class="field"><textarea id="rewriteAnswerInput" placeholder="Type your answer…">${escapeHtml(rewriteAnswers[rewriteStep])}</textarea></div>
+      <div style="display:flex; gap:8px;">
+        ${rewriteStep>0 ? `<button class="btn" id="rewritePrev">Back</button>` : ""}
+        <button class="btn btn-ghost" id="rewriteCancel">Cancel</button>
+        ${rewriteStep < REWRITE_QUESTIONS.length-1
+          ? `<button class="btn btn-primary" id="rewriteNext">Next</button>`
+          : `<button class="btn btn-primary" id="rewriteFinish">Finish &amp; save</button>`}
+      </div>
+    `;
+    const input = document.getElementById("rewriteAnswerInput");
+    input.addEventListener("input", e=>{ rewriteAnswers[rewriteStep] = e.target.value; });
+    if (document.getElementById("rewritePrev")) document.getElementById("rewritePrev").addEventListener("click", ()=>{ rewriteStep--; renderRewriteBox(); });
+    document.getElementById("rewriteCancel").addEventListener("click", ()=>{ rewriteActive = false; renderRewriteBox(); });
+    if (document.getElementById("rewriteNext")) document.getElementById("rewriteNext").addEventListener("click", ()=>{ rewriteStep++; renderRewriteBox(); });
+    if (document.getElementById("rewriteFinish")) document.getElementById("rewriteFinish").addEventListener("click", ()=>{
+      const target = rewriteAnswers[0].trim() || "Untitled rewrite";
+      state.rewrites.push({
+        id: uid(), target,
+        qas: REWRITE_QUESTIONS.map((q,i)=>({ q, a: rewriteAnswers[i].trim() })),
+        createdAt: Date.now()
+      });
+      save();
+      rewriteActive = false;
+      renderRewriteBox();
+      renderRewriteList();
+    });
+    input.focus();
+  }
+
+  function renderRewriteList(){
+    const list = document.getElementById("rewriteList");
+    const items = [...state.rewrites].sort((a,b)=>b.createdAt-a.createdAt);
+    if (!items.length) {
+      list.innerHTML = `<div class="empty"><h3>No rewrite sessions yet</h3><p>Start one above when you're ready to think a change through.</p></div>`;
+      return;
+    }
+    list.innerHTML = items.map(r=>`
+      <div class="idea-card" data-id="${r.id}">
+        <div class="prompt-ref">${fmtDate(r.createdAt)}</div>
+        <div style="font-family:var(--font-display); font-size:15px; margin-bottom:8px;">${escapeHtml(r.target)}</div>
+        <dl style="margin:0; display:flex; flex-direction:column; gap:6px;">
+          ${r.qas.filter(qa=>qa.a).map(qa=>`<div><dt style="font-size:11.5px;color:var(--color-text-dim);">${escapeHtml(qa.q)}</dt><dd style="margin:0;font-size:13px;white-space:pre-wrap;">${escapeHtml(qa.a)}</dd></div>`).join("")}
+        </dl>
+        <div style="margin-top:8px; display:flex; gap:6px;">
+          <button class="btn btn-ghost edit-rewrite">Edit</button>
+          <button class="btn btn-ghost btn-danger del-rewrite">Delete</button>
+        </div>
+      </div>`).join("");
+    list.querySelectorAll(".edit-rewrite").forEach(btn=>{
+      btn.addEventListener("click", e=>{
+        const id = e.target.closest(".idea-card").dataset.id;
+        const r = state.rewrites.find(r=>r.id===id);
+        if (!r) return;
+        showEditModal({
+          title: "Edit rewrite session",
+          fields: [
+            { key:"target", label:"What you're rewriting", value: r.target },
+            ...r.qas.map((qa,i)=>({ key:`qa_${i}`, label: qa.q, type:"textarea", rows:3, value: qa.a }))
+          ],
+          onSave: (values)=>{
+            r.target = values.target || r.target;
+            r.qas.forEach((qa,i)=>{ qa.a = values[`qa_${i}`]; });
+            save(); renderRewriteList();
+          }
+        });
+      });
+    });
+    list.querySelectorAll(".del-rewrite").forEach(btn=>{
+      btn.addEventListener("click", e=>{
+        const id = e.target.closest(".idea-card").dataset.id;
+        showConfirm({
+          title: "Move this rewrite session to trash?", message: "You can restore it later from the Trash.", confirmLabel: "Move to trash",
+          onConfirm: ()=>{
+            const r = state.rewrites.find(r=>r.id===id);
+            if (r) moveToTrash("rewrite", r);
+            state.rewrites = state.rewrites.filter(r=>r.id!==id);
+            save(); renderRewriteList();
+          }
+        });
+      });
+    });
+  }
+
+  document.querySelectorAll("#brainstormSubtabs .subtab").forEach(tab=>{
+    tab.addEventListener("click", ()=>{
+      document.querySelectorAll("#brainstormSubtabs .subtab").forEach(t=>t.classList.remove("active"));
+      tab.classList.add("active");
+      document.getElementById("bs-spin").classList.toggle("hidden", tab.dataset.bstab!=="spin");
+      document.getElementById("bs-rewrite").classList.toggle("hidden", tab.dataset.bstab!=="rewrite");
+      if (tab.dataset.bstab==="rewrite") { renderRewriteBox(); renderRewriteList(); }
+    });
+  });
+
+  /* ================= CONSISTENCY ================= */
+  document.querySelectorAll(".subtabs .subtab").forEach(tab=>{
+    if (tab.closest("#brainstormSubtabs")) return;
+    tab.addEventListener("click", ()=>{
+      document.querySelectorAll(".subtabs .subtab").forEach(t=>{ if (!t.closest("#brainstormSubtabs")) t.classList.remove("active"); });
+      tab.classList.add("active");
+      document.getElementById("consistency-entities").classList.toggle("hidden", tab.dataset.subtab!=="entities");
+      document.getElementById("consistency-compare").classList.toggle("hidden", tab.dataset.subtab!=="compare");
+    });
+  });
+
+  function renderConsistency(){
+    // entity/tag index
+    const tagMap = {};
+    state.topics.forEach(t=>{
+      (t.tags||[]).forEach(tag=>{
+        const key = tag.toLowerCase();
+        if (!tagMap[key]) tagMap[key] = { label: tag, notes: [] };
+        tagMap[key].notes.push(t);
+      });
+    });
+    const entityList = document.getElementById("entityList");
+    const entries = Object.values(tagMap).filter(e=>e.notes.length>1).sort((a,b)=>b.notes.length-a.notes.length);
+    if (!entries.length) {
+      entityList.innerHTML = `<div class="empty"><h3>Nothing to cross-check yet</h3><p>Tag two or more entries with the same word (a character name, a faction, an item) and they'll show up here grouped together, so you can check them against each other.</p></div>`;
+    } else {
+      entityList.innerHTML = entries.map(e=>`
+        <details class="entity-row">
+          <summary><span>${escapeHtml(e.label)}</span><span class="count">${e.notes.length} entries</span></summary>
+          <div class="mini-notes">
+            ${e.notes.map(n=>{
+              const plain = topicSearchText(n);
+              return `<div class="mini-note"><b>${escapeHtml(n.title)}</b><div class="snippet">${escapeHtml(plain.slice(0,220))}${plain.length>220?"…":""}</div></div>`;
+            }).join("")}
+          </div>
+        </details>`).join("");
+    }
+
+    // compare pickers
+    const selA = document.getElementById("compareA"), selB = document.getElementById("compareB");
+    const opts = `<option value="">Choose an entry…</option>` + state.topics.map(t=>`<option value="${t.id}">${escapeHtml(t.title)}</option>`).join("");
+    selA.innerHTML = opts; selB.innerHTML = opts;
+    function renderPanel(sel, panel){
+      const t = state.topics.find(x=>x.id===sel.value);
+      if (!t) { panel.innerHTML = `<div style="color:var(--color-text-dim); font-size:13px;">No entry selected.</div>`; return; }
+      const cat = CATS[t.category]||CATS.other;
+      const thumb = t.thumbnail ? `<img src="${t.thumbnail}" alt="" style="max-width:100%; border-radius:6px; margin-bottom:8px;">` : "";
+      const sectionsHtml = topicSections(t).map(s=>`<div style="margin-bottom:12px;"><div style="font-size:11.5px; font-weight:600; color:var(--color-text-dim); margin-bottom:4px;">${escapeHtml(s.name)}</div>${linkifyWikiLinks(s.content) || "<em>(empty)</em>"}</div>`).join("");
+      panel.innerHTML = `<h4>${escapeHtml(t.title)}</h4><div class="meta">${cat.label} · ${(t.tags||[]).join(", ")||"no tags"}</div>${thumb}<div class="content">${sectionsHtml}</div>`;
+    }
+    selA.onchange = ()=>renderPanel(selA, document.getElementById("comparePanelA"));
+    selB.onchange = ()=>renderPanel(selB, document.getElementById("comparePanelB"));
+    renderPanel(selA, document.getElementById("comparePanelA"));
+    renderPanel(selB, document.getElementById("comparePanelB"));
+  }
+
+  /* ================= BACKUP (export / import) ================= */
+  async function downloadJSON(filename, dataStr){
+    try {
+      if (window.claude && typeof window.claude.use === "function") {
+        const downloads = await window.claude.use("downloads");
+        if (downloads) { await downloads.save({ filename, data: dataStr }); return; }
+      }
+    } catch(e){ console.error("downloads capability unavailable, falling back:", e); }
+    try {
+      const blob = new Blob([dataStr], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch(e2){
+      console.error("Fallback download failed:", e2);
+      openGenericModal(`
+        <h2>Backup data</h2>
+        <p style="font-size:13px; color:var(--color-text-dim);">Automatic download isn't available here — copy this text and save it as a .json file yourself.</p>
+        <textarea style="width:100%; height:240px; font-family:monospace; font-size:11px;" readonly>${escapeHtml(dataStr)}</textarea>
+        <div class="modal-actions"><button class="btn btn-primary" id="gmBackupClose">Close</button></div>
+      `);
+      document.getElementById("gmBackupClose").addEventListener("click", closeGenericModal);
+    }
+  }
+  document.getElementById("btnExportBackup").addEventListener("click", async ()=>{
+    const dataStr = JSON.stringify(state, null, 2);
+    const filename = `logbook-backup-${new Date().toISOString().slice(0,10)}.json`;
+    await downloadJSON(filename, dataStr);
+  });
+
+  /* ---- Copy for AI (Claude / Codex) ----
+     Builds a plain-text bundle explaining what this app is, how it's put
+     together, and how to safely modify it — followed by the current data
+     as a JSON backup — so the whole thing can be pasted into an AI coding
+     assistant and used as full context for edits or additions. */
+  function buildAIContextText(){
+    const dataStr = JSON.stringify(state, null, 2);
+    return `# The Logbook — post-timeskip worldbuilding app
+
+This is a single self-contained HTML file (one <style> block, one <script>
+block, no build step, no external JS dependencies) that runs entirely in
+the browser. It's a personal worldbuilding tool for planning a
+post-timeskip story arc: characters, plot/timeline events, world &
+faction notes, character design references, mind-map-style "chart
+tables", an Elo-style character ranking board, brainstorming prompts,
+guided "rewrite" sessions for reworking canon, a consistency checker,
+structured creative "drills", a combined activity timeline, and a trash
+bin with restore.
+
+## How it's built
+- Plain HTML/CSS/JS, wrapped in a single IIFE at the bottom of the file.
+- All app data lives in one in-memory object called \`state\`, with these
+  top-level arrays: topics, mindmaps, ideas, drills, designs, rewrites,
+  elo, trash. Each item in these arrays is a plain object with an \`id\`
+  (from the \`uid()\` helper) plus \`createdAt\`/\`updatedAt\` timestamps
+  (ms since epoch).
+- Persistence: \`state\` is saved to \`localStorage\` under the key
+  "owb_logbook_v1" via \`saveLocalCache()\`. If the SUPABASE_URL /
+  SUPABASE_ANON_KEY constants near the top of the script are filled in
+  (they're placeholders by default), the app also syncs that same JSON
+  blob to a Supabase table called \`logbook_state\` (single row, id
+  "main"), polling every 7s and merging on save — see \`mergeStates()\`
+  and the big comment above it for the merge/tombstone logic. Without
+  Supabase configured, it just runs local-only.
+- A lightweight, non-secure "profile" (username/description/avatar) is
+  stored separately under localStorage key "owb_profile" and shown on
+  the login screen and next to entries via \`createdBy\`.
+- Views are plain \`<div class="view" id="view-NAME">\` sections toggled
+  by \`showView(name)\`; the sidebar's \`data-view\` buttons drive
+  navigation. Each view has a \`renderX()\` function that rebuilds its
+  DOM from \`state\` — there's no virtual DOM, rendering is
+  innerHTML-based and re-run after every state change, generally
+  followed by \`save()\`.
+- Rich text entry content is stored as raw HTML (from a
+  \`contenteditable\` div + \`document.execCommand\`). Entries can be
+  split into named "sections" (e.g. "Story", "Compared to canon").
+  \`[[Entry Title]]\` in any rich text is auto-linked to another entry
+  with a matching title via \`linkifyWikiLinks()\`.
+- Images (avatars, thumbnails, reference images, inline images) are
+  resized client-side with a canvas and stored as base64 data URLs
+  directly inside \`state\` — there's no separate asset/file storage.
+- Native \`confirm()\`/\`alert()\`/\`prompt()\` are not used; there's a
+  custom modal system (\`showConfirm\`, \`showAlert\`, \`showPrompt\`,
+  \`showEditModal\`) built on a generic \`#genericModalOverlay\` div.
+- Deleting anything moves it into \`state.trash\` (via
+  \`moveToTrash(type, item)\`) instead of deleting it outright, so it can
+  be restored from the Trash view; permanent deletion is a separate,
+  explicit action.
+- Theming: a light theme is the default, with optional "dark" and
+  "black" overrides via \`data-theme\` on \`<html>\`, plus an
+  automatic \`prefers-color-scheme: dark\` fallback. All colors are CSS
+  custom properties on \`:root\`.
+
+## How to safely edit or extend this file
+- Keep everything in this one HTML file — no build tools, no imports,
+  no frameworks. Vanilla JS only, ES2017-ish (async/await is fine).
+- To add a new kind of content (a new "collection"), mirror an existing
+  one closely, e.g. Elo Rankings or Designs: add an array to
+  \`defaultState()\`, add it to \`MERGEABLE_COLLECTIONS\` if it should
+  sync/merge, add it to \`TRASH_ARRAY_BY_TYPE\` / \`TRASH_TYPE_LABEL\` if
+  it should support trash/restore, add a nav button + \`<div class="view"
+  id="view-NAME">\` section, a \`renderNAME()\` function, and CRUD
+  handlers that call \`save()\` after mutating \`state\`.
+- Always give new items an \`id: uid()\`, and \`createdAt\`/\`updatedAt\`
+  set to \`Date.now()\` (update \`updatedAt\` on every edit) — the sync
+  merge logic in \`mergeStates()\` depends on these.
+- Call \`save()\` after any mutation to \`state\` so it persists locally
+  (and syncs, if Supabase is configured). Call the relevant
+  \`renderX()\` (or \`refreshCurrentView()\`) afterward to update the UI.
+- Reuse the existing modal helpers (\`showConfirm\`/\`showAlert\`/
+  \`showPrompt\`/\`showEditModal\`) instead of native dialogs, and reuse
+  existing CSS classes (\`.btn\`, \`.field\`, \`.chip\`, \`.empty\`,
+  \`.idea-card\`, etc.) to match the existing look.
+- Escape any user text inserted via innerHTML with \`escapeHtml()\`
+  unless it's deliberately rich text (already-sanitized-by-nothing HTML
+  from the rich text editor — this app trusts its own editor output).
+- The whole file must remain a single valid .html document that can be
+  opened directly in a browser or published as-is.
+
+## Source of truth: the Peak Piece repository
+This app is a personal planning/tracking layer for a real writing
+project called **Peak Piece** — an unofficial, non-commercial
+reimagining of *One Piece* — whose actual content lives in a GitHub
+repository, not in this app:
+
+  https://github.com/nathaniel-bonolo/peak-piece
+
+That repository, not this app's JSON, is the canonical source of truth
+for any content that has already been written and committed there. This
+app exists for drafting, tracking, brainstorming, ranking, and
+cross-checking ideas — some of which are only ever local notes, and
+some of which eventually get written into the repository as real
+files. If you (the AI) have direct access to that repository (e.g. via
+a connected GitHub tool, \`gh\` CLI, or a cloned checkout), prefer reading
+the actual files there over inferring from this app's JSON whenever the
+two could disagree, and treat the repo's own status vocabulary
+(canon / Peak Piece locked / current draft / contested extension /
+active proposal / rejected / superseded) as authoritative — see the
+repo's own \`AGENTS.md\` for the full guidance on that.
+
+The repository is organized in two main layers plus an AI-onboarding
+folder:
+
+\`\`\`text
+peak-piece/
+├── README.md, AGENTS.md, CONTRIBUTING.md, CONTRIBUTORS.md,
+│   CHANGELOG.md, project.json        # repo administration
+├── prompts/                          # copy/paste AI onboarding prompts
+│   ├── AGENTPROMPT.md                # for a repo-capable AI ingesting the bible
+│   ├── CREATORPROMPT.md              # for other creators evaluating the project
+│   └── CONTRIBUTORPROMPT.md          # interactive contributor onboarding
+├── story/                            # reader-facing: what readers read
+│   ├── story-overview.md, _Story.md
+│   ├── interludes/                   # standalone interlude chapters
+│   └── sagas/<saga-slug>/
+│       ├── saga.md
+│       └── arcs/<arc-slug>/
+│           ├── arc.md
+│           └── chapters/             # finished chapters as they're written
+└── production/                       # writer-facing production bible
+    ├── 00 - Peak Piece.md            # Obsidian vault entry point
+    ├── FOUNDATIONS.md, DECISION-STATUS.md, WRITING-PHILOSOPHY.md,
+    │   STYLE-GUIDE.md, WORKFLOW.md, REVIEW-PROTOCOL.md, OBSIDIAN.md
+    ├── characters/<character-slug>/
+    │   └── overview.md (+ abilities.md, progression.md,
+    │       relationships.md, canon-audit.md, timeskip.md — as needed)
+    ├── lore/
+    │   ├── factions/*.md (+ factions/small-moments/ vignettes)
+    │   ├── economy/*.md, history/*.md, locations/*.md
+    │   └── timeline.md
+    ├── systems/*.md                  # haki, devil-fruits, gems, combat,
+    │                                  # technology, soul-system — each
+    │                                  # often paired with a *-canon-audit.md
+    ├── proposals/{active,archived,rejected}/*.md
+    ├── story-notes/                  # per-arc canon audits, scene seeds,
+    │                                  # tone tests, timeskip direction notes
+    ├── references/{canon,history,mythology,science}/*.md
+    ├── spinoffs/<spinoff-slug>/*.md
+    ├── templates/*.md                # arc, chapter, character, lore,
+    │                                  # system, proposal, episode, etc.
+    ├── indexes/*.md                  # Characters, Lore, Systems, Proposals…
+    ├── canvas/*.canvas               # Obsidian canvas mind maps
+    ├── community/*.md, assets/, anime/, manga/
+    └── README.md
+\`\`\`
+
+### How this app's data maps onto that repo
+- **Logbook "Character" entries** correspond to
+  \`production/characters/<slug>/overview.md\` (and its sibling files —
+  \`abilities.md\`, \`progression.md\`, \`relationships.md\`,
+  \`canon-audit.md\`, \`timeskip.md\` — where they exist for that
+  character). A Logbook entry's "sections" feature is a lightweight
+  analog of splitting a character across those sibling files.
+- **Logbook "Arcs" entries** correspond to
+  \`story/sagas/<saga>/arcs/<arc>/arc.md\` and the saga's \`saga.md\`.
+- **Logbook "Timeline & plot" entries** correspond to
+  \`production/lore/timeline.md\` and
+  \`production/story-notes/timeskip/current-direction.md\`.
+- **Logbook "World & factions" entries** correspond to
+  \`production/lore/factions/\`, \`lore/economy/\`, \`lore/history/\`, and
+  \`lore/locations/\`.
+- **Logbook "Other" entries**, the Crow's Nest rewrite sessions, and the
+  Drills runs are the rough-draft equivalent of
+  \`production/story-notes/\` (canon audits, scene seeds, tone tests) and
+  \`production/proposals/active/\` — a promising idea here is a candidate
+  to eventually become a proposal file following
+  \`production/templates/proposal.md\`.
+- **Chart Table** (this app's mind maps) is the same concept as the
+  repo's \`production/canvas/*.canvas\` Obsidian canvas boards.
+- **Ledger Check** (this app's consistency checker) is a lightweight
+  stand-in for the repo's per-topic \`canon-audit.md\` files and
+  \`production/references/canon/source-policy.md\`.
+- **Wanted Board** and **Elo Rankings** are purely local to this app —
+  the repo has no equivalent for reference-image boards or numeric
+  character rankings.
+
+If asked to turn an entry drafted in this app into a real repo file,
+follow the existing convention for that content type (file name,
+sibling files, and the matching template under
+\`production/templates/\`) rather than inventing a new layout.
+
+## What to do with the JSON below
+The JSON that follows is a full export of this app's own local data
+(the exact same format produced by the "Download backup" button, and
+the same format accepted by "Restore from backup") — it is a planning
+layer, not the repository. If you (the AI) are asked to add, remove, or
+edit specific entries, characters, designs, etc. *within this app*,
+treat this JSON as the current state of that content. If asked to hand
+back updated data for this app, return it in this same shape so it can
+be pasted into "Restore from backup" (merge mode) to bring the changes
+back into the app. If asked instead to write or update files in the
+actual repository, use the repository structure and mapping above, not
+this JSON's shape.
+
+## Current data (JSON backup)
+\`\`\`json
+${dataStr}
+\`\`\``;
+  }
+
+  async function copyForAI(){
+    const label = document.getElementById("btnCopyForAILabel");
+    const text = buildAIContextText();
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        throw new Error("Clipboard API unavailable");
+      }
+      const original = label.textContent;
+      label.textContent = "Copied!";
+      setTimeout(()=>{ label.textContent = original; }, 1800);
+    } catch(e){
+      console.error("Clipboard copy failed, showing text instead:", e);
+      openGenericModal(`
+        <h2>Copy for AI editing</h2>
+        <p style="font-size:13px; color:var(--color-text-dim);">Automatic copying isn't available here — select all and copy this text yourself, then paste it into Claude or Codex.</p>
+        <textarea style="width:100%; height:320px; font-family:monospace; font-size:11px;" readonly>${escapeHtml(text)}</textarea>
+        <div class="modal-actions"><button class="btn btn-primary" id="gmCopyClose">Close</button></div>
+      `);
+      document.getElementById("gmCopyClose").addEventListener("click", closeGenericModal);
+    }
+  }
+  document.getElementById("btnCopyForAI").addEventListener("click", copyForAI);
+
+  function showImportChoice({ onMerge, onReplace }){
+    openGenericModal(`
+      <h2>Restore from backup</h2>
+      <p style="font-size:13.5px; color:var(--color-text-dim); margin:0 0 18px 0;">Merge keeps everything from both your current data and the backup — for any entry that exists in both, whichever version was edited more recently wins. Replace throws away everything currently here (including anything in the shared database, if this is connected to one) and uses only the backup — pick this only if you're sure you want to undo other people's work too.</p>
+      <div class="modal-actions" style="justify-content:space-between;">
+        <button class="btn" id="gmImportCancel">Cancel</button>
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-danger" id="gmImportReplace">Replace everything</button>
+          <button class="btn btn-primary" id="gmImportMerge">Merge</button>
+        </div>
+      </div>
+    `);
+    document.getElementById("gmImportCancel").addEventListener("click", closeGenericModal);
+    document.getElementById("gmImportMerge").addEventListener("click", ()=>{ closeGenericModal(); onMerge(); });
+    document.getElementById("gmImportReplace").addEventListener("click", ()=>{ closeGenericModal(); onReplace(); });
+  }
+
+  document.getElementById("btnImportBackup").addEventListener("click", ()=> document.getElementById("importFileInput").click());
+  document.getElementById("importFileInput").addEventListener("change", e=>{
+    const file = e.target.files[0];
+    e.target.value = "";
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ()=>{
+      let parsed;
+      try { parsed = JSON.parse(reader.result); }
+      catch(err){ showAlert({ title: "Couldn't read file", message: "That doesn't look like a valid backup file." }); return; }
+      const importedState = defaultState();
+      Object.assign(importedState, parsed);
+      migrateLegacyMindmap(parsed, importedState);
+      showImportChoice({
+        onMerge: async ()=>{
+          state = mergeStates(state, importedState);
+          saveLocalCache();
+          refreshCurrentView();
+          await save();
+          showAlert({ title: "Backup merged", message: "Entries from the backup have been merged in alongside what was already here — whichever version of each was edited more recently was kept." });
+        },
+        onReplace: ()=>{
+          showConfirm({
+            title: "Replace all current data?",
+            message: "This overwrites everything currently in the app — and the shared database, if this is connected to one — with only the contents of this backup. This can't be undone.",
+            confirmLabel: "Replace data",
+            onConfirm: async ()=>{
+              state = importedState;
+              await save({ skipMerge: true });
+              refreshCurrentView();
+              showAlert({ title: "Backup restored", message: "Your data has been replaced with the backup." });
+            }
+          });
+        }
+      });
+    };
+    reader.readAsText(file);
+  });
+
+  /* ================= DRILLS ================= */
+  const DRILL_SCHEMAS = {
+    scamper: {
+      name: "SCAMPER",
+      desc: "Rework a canon element seven different ways.",
+      targetLabel: "Canon element you're reworking",
+      fields: [
+        { key:"substitute", label:"Substitute — what could you swap out?" },
+        { key:"combine", label:"Combine — what could you merge with something else?" },
+        { key:"adapt", label:"Adapt — what could you adjust to fit the new context?" },
+        { key:"modify", label:"Modify / magnify — what could you emphasize or scale up?" },
+        { key:"putToUse", label:"Put to another use — how else could this serve the story?" },
+        { key:"eliminate", label:"Eliminate — what could you cut entirely?" },
+        { key:"reverse", label:"Reverse — what if the roles or order flipped?" }
+      ]
+    },
+    fivewhys: {
+      name: "Five Whys",
+      desc: "Chase a plot hole or a shaky motivation back to its root.",
+      targetLabel: "Problem or plot hole",
+      fields: [
+        { key:"why1", label:"Why does this happen? (1)" },
+        { key:"why2", label:"Why is that? (2)" },
+        { key:"why3", label:"Why is that? (3)" },
+        { key:"why4", label:"Why is that? (4)" },
+        { key:"why5", label:"Why is that? (5 — the root)" }
+      ]
+    },
+    conflict: {
+      name: "Conflict Matrix",
+      desc: "Lay both sides of a scene or arc out before you write it.",
+      targetLabel: "Scene or arc",
+      fields: [
+        { key:"sideAGoal", label:"Side A — what do they want?" },
+        { key:"sideAObstacle", label:"Side A — what's stopping them?" },
+        { key:"sideBGoal", label:"Side B — what do they want?" },
+        { key:"sideBObstacle", label:"Side B — what's stopping them?" },
+        { key:"stakes", label:"What does each side stand to lose?" },
+        { key:"resolution", label:"Seed of how it could resolve" }
+      ]
+    },
+    timeline: {
+      name: "Timeline Braid",
+      desc: "Track exactly how your version diverges from canon, event by event.",
+      targetLabel: "Arc or time period",
+      fields: [
+        { key:"canonEvent", label:"Canon event" },
+        { key:"canonDate", label:"Canon timing" },
+        { key:"yourEvent", label:"Your version's event" },
+        { key:"yourDate", label:"Your version's timing" },
+        { key:"consequence", label:"What this divergence changes downstream" }
+      ]
+    }
+  };
+
+  function renderDrillForm(){
+    const type = document.getElementById("drillType").value;
+    const schema = DRILL_SCHEMAS[type];
+    const wrap = document.getElementById("drillFormWrap");
+    wrap.innerHTML = `
+      <div class="drill-form">
+        <h3>${schema.name}</h3>
+        <p class="drill-desc">${schema.desc}</p>
+        <div class="field"><label>${schema.targetLabel}</label><input id="drillTarget"></div>
+        ${schema.fields.map(f=>`<div class="field"><label>${f.label}</label><textarea data-key="${f.key}" class="drill-field" style="min-height:60px;"></textarea></div>`).join("")}
+        <button class="btn btn-primary" id="drillSave">Save run</button>
+      </div>`;
+    document.getElementById("drillSave").addEventListener("click", ()=>{
+      const target = document.getElementById("drillTarget").value.trim();
+      if (!target) { document.getElementById("drillTarget").focus(); return; }
+      const answers = {};
+      wrap.querySelectorAll(".drill-field").forEach(el => answers[el.dataset.key] = el.value.trim());
+      state.drills.push({ id: uid(), type, target, answers, createdAt: Date.now() });
+      save(); renderDrillForm(); renderDrillEntries();
+    });
+  }
+
+  let drillSearchTerm = "";
+  function renderDrillEntries(){
+    const type = document.getElementById("drillType").value;
+    const schema = DRILL_SCHEMAS[type];
+    const container = document.getElementById("drillEntries");
+    let items = state.drills.filter(d=>d.type===type).sort((a,b)=>b.createdAt-a.createdAt);
+    if (drillSearchTerm.trim()) {
+      const q = drillSearchTerm.toLowerCase();
+      items = items.filter(d =>
+        (d.target||"").toLowerCase().includes(q) ||
+        Object.values(d.answers||{}).some(v => (v||"").toLowerCase().includes(q))
+      );
+    }
+    if (!items.length) {
+      container.innerHTML = `<div class="empty"><h3>No ${schema.name} runs ${drillSearchTerm.trim()?"match that search":"yet"}</h3><p>${drillSearchTerm.trim()?"Try a different search term.":"Fill in the form above and save it to keep a record here."}</p></div>`;
+      return;
+    }
+    container.innerHTML = items.map(d=>`
+      <div class="drill-entry" data-id="${d.id}">
+        <div class="drill-entry-head">
+          <h4>${escapeHtml(d.target)}</h4>
+          <div class="card-actions">
+            <button class="icon-btn edit-drill" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/></svg></button>
+            <button class="icon-btn del-drill" title="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button>
+          </div>
+        </div>
+        <div style="font-size:11.5px; color:var(--color-text-dim); margin-bottom:8px;">${fmtDate(d.createdAt)}</div>
+        <dl>
+          ${schema.fields.filter(f=>d.answers[f.key]).map(f=>`<div><dt>${f.label}</dt><dd>${escapeHtml(d.answers[f.key])}</dd></div>`).join("") || "<div style='color:var(--color-text-dim); font-size:13px;'>(left blank)</div>"}
+        </dl>
+      </div>`).join("");
+    container.querySelectorAll(".edit-drill").forEach(btn=>{
+      btn.addEventListener("click", e=>{
+        const id = e.target.closest(".drill-entry").dataset.id;
+        const d = state.drills.find(d=>d.id===id);
+        if (!d) return;
+        const s = DRILL_SCHEMAS[d.type];
+        showEditModal({
+          title: `Edit ${s.name} run`,
+          fields: [
+            { key:"target", label: s.targetLabel, value: d.target },
+            ...s.fields.map(f=>({ key:f.key, label:f.label, type:"textarea", rows:3, value: d.answers[f.key]||"" }))
+          ],
+          onSave: (values)=>{
+            d.target = values.target || d.target;
+            s.fields.forEach(f=>{ d.answers[f.key] = values[f.key]; });
+            save(); renderDrillEntries();
+          }
+        });
+      });
+    });
+    container.querySelectorAll(".del-drill").forEach(btn=>{
+      btn.addEventListener("click", e=>{
+        const id = e.target.closest(".drill-entry").dataset.id;
+        const d = state.drills.find(d=>d.id===id);
+        if (d) moveToTrash("drill", d);
+        state.drills = state.drills.filter(d=>d.id!==id);
+        save(); renderDrillEntries();
+      });
+    });
+  }
+  document.getElementById("drillSearch").addEventListener("input", e=>{ drillSearchTerm = e.target.value; renderDrillEntries(); });
+
+  function renderDrills(){
+    const sel = document.getElementById("drillType");
+    if (!sel.options.length) {
+      sel.innerHTML = Object.entries(DRILL_SCHEMAS).map(([key,s])=>`<option value="${key}">${s.name}</option>`).join("");
+      sel.addEventListener("change", ()=>{ renderDrillForm(); renderDrillEntries(); });
+    }
+    renderDrillForm();
+    renderDrillEntries();
+  }
+
+  /* ================= WANTED BOARD (character design) ================= */
+  const MAX_IMG_DIM = 900;
+  const IMG_QUALITY = 0.82;
+  let editingDesignId = null;
+  let draftImages = [];
+  let draftBullets = [];
+
+  function resizeImageFile(file){
+    return new Promise((resolve, reject)=>{
+      const reader = new FileReader();
+      reader.onerror = () => reject(reader.error);
+      reader.onload = () => {
+        const img = new Image();
+        img.onerror = () => reject(new Error("Could not read image"));
+        img.onload = () => {
+          let { width, height } = img;
+          if (width > MAX_IMG_DIM || height > MAX_IMG_DIM) {
+            const scale = MAX_IMG_DIM / Math.max(width, height);
+            width = Math.round(width * scale);
+            height = Math.round(height * scale);
+          }
+          const canvas = document.createElement("canvas");
+          canvas.width = width; canvas.height = height;
+          canvas.getContext("2d").drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL("image/jpeg", IMG_QUALITY));
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  /* ---------------- Image storage (Supabase Storage) ----------------
+     Images are uploaded as real files to a Supabase Storage bucket and
+     only a short URL string is kept in the synced state, instead of the
+     full image being embedded as base64 inside that state. The app
+     polls the whole state every few seconds per open tab, so embedding
+     images directly would mean re-downloading every image, in full, on
+     every poll, for every open tab — this is what was eating through
+     Supabase's free bandwidth allowance after only a handful of images.
+     A URL is a few dozen bytes regardless of how large the image behind
+     it is, and the <img> tag loads (and the browser caches) that image
+     separately from the polling loop, so it's only fetched when it's
+     actually first displayed, not every 7 seconds.
+     Requires a public Storage bucket named exactly IMAGE_BUCKET with an
+     "insert" policy for anon uploads (see the setup guide). Falls back
+     to the old inline-base64 behavior in local-only mode (no Supabase
+     configured) or if the upload itself fails, so nothing is lost —
+     it's just bigger than it needs to be in that case. */
+  const IMAGE_BUCKET = "logbook-images";
+
+  function dataUrlToBlob(dataUrl){
+    return fetch(dataUrl).then(r => r.blob());
+  }
+
+  async function uploadImageDataUrl(dataUrl, prefix){
+    if (!SUPABASE_CONFIGURED) return dataUrl;
+    try {
+      const blob = await dataUrlToBlob(dataUrl);
+      const ext = blob.type === "image/png" ? "png" : "jpg";
+      const path = `${prefix}/${uid()}.${ext}`;
+      const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${IMAGE_BUCKET}/${path}`, {
+        method: "POST",
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          "Content-Type": blob.type || "image/jpeg"
+        },
+        body: blob
+      });
+      if (!res.ok) throw new Error("Storage upload failed: " + res.status);
+      return `${SUPABASE_URL}/storage/v1/object/public/${IMAGE_BUCKET}/${path}`;
+    } catch(e) {
+      console.error("Image upload to Supabase Storage failed, keeping it inline instead:", e);
+      return dataUrl;
+    }
+  }
+
+  async function resizeAndUploadImage(file, prefix){
+    const dataUrl = await resizeImageFile(file);
+    return uploadImageDataUrl(dataUrl, prefix);
+  }
+
+  let designSearchTerm = "";
+  function renderDesigns(){
+    const grid = document.getElementById("designGrid");
+    let list = [...state.designs].sort((a,b)=>b.updatedAt-a.updatedAt);
+    if (designSearchTerm.trim()) {
+      const q = designSearchTerm.toLowerCase();
+      list = list.filter(d =>
+        (d.name||"").toLowerCase().includes(q) ||
+        (d.notes||"").toLowerCase().includes(q) ||
+        (d.bullets||[]).some(b => (b||"").toLowerCase().includes(q))
+      );
+    }
+    if (!list.length) {
+      grid.innerHTML = designSearchTerm.trim()
+        ? `<div class="empty"><h3>No designs match that search</h3><p>Try a different name or keyword.</p></div>`
+        : `<div class="empty"><h3>No designs pinned yet</h3><p>Upload reference images and jot the bullet points that define a look — kept separate from your logbook entries.</p><button class="btn btn-primary" id="emptyNewDesign">New design</button></div>`;
+      if (!designSearchTerm.trim()) document.getElementById("emptyNewDesign").addEventListener("click", ()=>openDesignModal(null));
+      return;
+    }
+    grid.innerHTML = list.map(designCardHtml).join("");
+    grid.querySelectorAll(".design-card").forEach(card=>{
+      card.addEventListener("click", ()=> openDesignModal(state.designs.find(d=>d.id===card.dataset.id)));
+    });
+    grid.querySelectorAll(".edit-design").forEach(btn=>{
+      btn.addEventListener("click", e=>{
+        e.stopPropagation();
+        const id = e.target.closest(".design-card").dataset.id;
+        openDesignModal(state.designs.find(d=>d.id===id));
+      });
+    });
+    grid.querySelectorAll(".del-design").forEach(btn=>{
+      btn.addEventListener("click", e=>{
+        e.stopPropagation();
+        const id = e.target.closest(".design-card").dataset.id;
+        showConfirm({
+          title: "Move this design to trash?", message: "You can restore it later from the Trash.", confirmLabel: "Move to trash",
+          onConfirm: ()=>{
+            const d = state.designs.find(d=>d.id===id);
+            if (d) moveToTrash("design", d);
+            state.designs = state.designs.filter(d=>d.id!==id);
+            save(); renderDesigns(); renderDashboard();
+          }
+        });
+      });
+    });
+  }
+  document.getElementById("designSearch").addEventListener("input", e=>{ designSearchTerm = e.target.value; renderDesigns(); });
+
+  function designCardHtml(d){
+    const thumbs = (d.images||[]).slice(0,3);
+    const thumbsHtml = thumbs.length
+      ? `<div class="design-thumbs">${thumbs.map(im=>`<img src="${im.dataUrl}" alt="">`).join("")}</div>`
+      : `<div class="design-thumbs empty">No references yet</div>`;
+    const bullets = (d.bullets||[]).filter(Boolean);
+    const bulletsHtml = bullets.length
+      ? `<ul class="design-bullets-preview">${bullets.slice(0,3).map(b=>`<li>${escapeHtml(b)}</li>`).join("")}${bullets.length>3?`<li>+ ${bullets.length-3} more</li>`:""}</ul>`
+      : `<p class="design-bullets-preview" style="list-style:none; padding-left:0; margin:0;">No design points yet</p>`;
+    return `
+      <div class="design-card" data-id="${d.id}">
+        ${thumbsHtml}
+        <div class="design-card-body">
+          <div class="topic-card-head">
+            <h3>${escapeHtml(d.name||"Untitled")}</h3>
+            <div class="card-actions">
+              <button class="icon-btn edit-design" title="Edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/></svg></button>
+              <button class="icon-btn del-design" title="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button>
+            </div>
+          </div>
+          ${bulletsHtml}
+          ${d.createdBy ? `<div class="entry-author">by ${escapeHtml(d.createdBy)}</div>` : ""}
+        </div>
+        <div class="design-card-foot">
+          <span style="font-size:11.5px; color:var(--color-text-dim);">${(d.images||[]).length} image${(d.images||[]).length===1?"":"s"}</span>
+          <span style="font-size:11.5px; color:var(--color-text-dim);">${fmtDate(d.updatedAt)}</span>
+        </div>
+      </div>`;
+  }
+
+  function renderImgThumbs(){
+    const wrap = document.getElementById("imgThumbGrid");
+    wrap.innerHTML = draftImages.map(im=>`
+      <div class="img-thumb" data-id="${im.id}">
+        <img src="${im.dataUrl}" alt="">
+        <button type="button" class="img-remove" title="Remove image">✕</button>
+      </div>`).join("");
+    wrap.querySelectorAll(".img-remove").forEach(btn=>{
+      btn.addEventListener("click", (e)=>{
+        e.stopPropagation();
+        const id = e.target.closest(".img-thumb").dataset.id;
+        draftImages = draftImages.filter(im=>im.id!==id);
+        renderImgThumbs();
+      });
+    });
+  }
+
+  function renderBulletRows(){
+    const wrap = document.getElementById("bulletList");
+    if (!draftBullets.length) draftBullets = [""];
+    wrap.innerHTML = draftBullets.map((b,i)=>`
+      <div class="bullet-row" data-idx="${i}">
+        <input type="text" value="${escapeHtml(b)}" placeholder="e.g. Scar across the left eyebrow now, from the timeskip">
+        <button type="button" class="icon-btn remove-bullet" title="Remove point"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+      </div>`).join("");
+    wrap.querySelectorAll(".bullet-row input").forEach(inp=>{
+      inp.addEventListener("input", e=>{
+        const idx = Number(e.target.closest(".bullet-row").dataset.idx);
+        draftBullets[idx] = e.target.value;
+      });
+    });
+    wrap.querySelectorAll(".remove-bullet").forEach(btn=>{
+      btn.addEventListener("click", e=>{
+        const idx = Number(e.target.closest(".bullet-row").dataset.idx);
+        draftBullets.splice(idx,1);
+        if (!draftBullets.length) draftBullets = [""];
+        renderBulletRows();
+      });
+    });
+  }
+
+  function openDesignModal(design){
+    editingDesignId = design ? design.id : null;
+    document.getElementById("designModalTitle").textContent = design ? "Edit design" : "New design";
+    document.getElementById("designNameInput").value = design ? design.name : "";
+    document.getElementById("designNotesInput").value = design ? design.notes||"" : "";
+    draftImages = design ? design.images.map(im=>({...im})) : [];
+    draftBullets = design ? [...(design.bullets||[""])] : [""];
+    renderImgThumbs();
+    renderBulletRows();
+    document.getElementById("designDeleteBtn").classList.toggle("hidden", !design);
+    document.getElementById("designModalOverlay").classList.remove("hidden");
+    document.getElementById("designNameInput").focus();
+  }
+  function closeDesignModal(){
+    document.getElementById("designModalOverlay").classList.add("hidden");
+    editingDesignId = null; draftImages = []; draftBullets = [];
+  }
+
+  document.getElementById("btnNewDesign").addEventListener("click", ()=>openDesignModal(null));
+  document.getElementById("designModalCancel").addEventListener("click", closeDesignModal);
+  document.getElementById("designModalOverlay").addEventListener("click", e=>{
+    if (e.target.id === "designModalOverlay") closeDesignModal();
+  });
+
+  const imgUploadZone = document.getElementById("imgUploadZone");
+  const imgFileInput = document.getElementById("imgFileInput");
+  imgUploadZone.addEventListener("click", ()=> imgFileInput.click());
+  imgUploadZone.addEventListener("dragover", e=>{ e.preventDefault(); imgUploadZone.style.background = "var(--color-surface-2)"; });
+  imgUploadZone.addEventListener("dragleave", ()=>{ imgUploadZone.style.background = ""; });
+  imgUploadZone.addEventListener("drop", e=>{
+    e.preventDefault(); imgUploadZone.style.background = "";
+    handleImageFiles(e.dataTransfer.files);
+  });
+  imgFileInput.addEventListener("change", e=>{
+    handleImageFiles(e.target.files);
+    imgFileInput.value = "";
+  });
+  async function handleImageFiles(fileList){
+    const files = Array.from(fileList||[]).filter(f=>f.type.startsWith("image/"));
+    for (const file of files) {
+      try {
+        const dataUrl = await resizeAndUploadImage(file, "designs");
+        draftImages.push({ id: uid(), dataUrl });
+        renderImgThumbs();
+      } catch(e){ console.error("Could not read image:", e); }
+    }
+  }
+
+  document.getElementById("addBulletBtn").addEventListener("click", ()=>{
+    draftBullets.push("");
+    renderBulletRows();
+    const rows = document.querySelectorAll("#bulletList .bullet-row input");
+    if (rows.length) rows[rows.length-1].focus();
+  });
+
+  document.getElementById("designModalSave").addEventListener("click", async ()=>{
+    const name = document.getElementById("designNameInput").value.trim();
+    if (!name) { document.getElementById("designNameInput").focus(); return; }
+    const notes = document.getElementById("designNotesInput").value;
+    const bullets = draftBullets.map(b=>b.trim()).filter(Boolean);
+    const now = Date.now();
+    if (editingDesignId) {
+      const d = state.designs.find(d=>d.id===editingDesignId);
+      Object.assign(d, { name, notes, bullets, images: draftImages, updatedAt: now });
+    } else {
+      state.designs.push({ id: uid(), name, notes, bullets, images: draftImages, createdBy: profile ? profile.username : null, createdAt: now, updatedAt: now });
+    }
+    closeDesignModal(); renderDesigns();
+    await save();
+  });
+
+  document.getElementById("designDeleteBtn").addEventListener("click", ()=>{
+    if (!editingDesignId) return;
+    showConfirm({
+      title: "Move this design to trash?", message: "You can restore it later from the Trash.", confirmLabel: "Move to trash",
+      onConfirm: ()=>{
+        const d = state.designs.find(d=>d.id===editingDesignId);
+        if (d) moveToTrash("design", d);
+        state.designs = state.designs.filter(d=>d.id!==editingDesignId);
+        save(); closeDesignModal(); renderDesigns();
+      }
+    });
+  });
+
+  /* ---------------- Elo Rankings ---------------- */
+  let editingEloId = null;
+  let eloSearchTerm = "";
+
+  function renderElo(){
+    const list = document.getElementById("eloList");
+    let items = [...state.elo].sort((a,b)=> (b.elo||0) - (a.elo||0));
+    if (eloSearchTerm.trim()) {
+      const q = eloSearchTerm.toLowerCase();
+      items = items.filter(c =>
+        (c.name||"").toLowerCase().includes(q) ||
+        (c.description||"").toLowerCase().includes(q)
+      );
+    }
+    if (!items.length) {
+      list.innerHTML = eloSearchTerm.trim()
+        ? `<div class="empty"><h3>No characters match that search</h3><p>Try a different name or keyword.</p></div>`
+        : `<div class="empty"><h3>No rankings yet</h3><p>Add a character, give them an Elo, and note why they land where they do.</p><button class="btn btn-primary" id="emptyNewElo">New ranking</button></div>`;
+      if (!eloSearchTerm.trim()) document.getElementById("emptyNewElo").addEventListener("click", ()=>openEloModal(null));
+      return;
+    }
+    list.innerHTML = items.map((c,i)=>`
+      <div class="elo-row" data-id="${c.id}">
+        <div class="elo-rank">#${i+1}</div>
+        <div class="elo-main">
+          <h3>${escapeHtml(c.name||"Untitled")}</h3>
+          ${c.description ? `<div class="elo-desc">${escapeHtml(c.description)}</div>` : ""}
+        </div>
+        <div class="elo-score">${Number(c.elo||0)}</div>
+      </div>`).join("");
+    list.querySelectorAll(".elo-row").forEach(row=>{
+      row.addEventListener("click", ()=> openEloModal(state.elo.find(c=>c.id===row.dataset.id)));
+    });
+  }
+  document.getElementById("eloSearch").addEventListener("input", e=>{ eloSearchTerm = e.target.value; renderElo(); });
+  document.getElementById("btnNewElo").addEventListener("click", ()=>openEloModal(null));
+
+  function openEloModal(entry){
+    editingEloId = entry ? entry.id : null;
+    document.getElementById("eloModalTitle").textContent = entry ? "Edit ranking" : "New ranking";
+    document.getElementById("eloNameInput").value = entry ? entry.name : "";
+    document.getElementById("eloScoreInput").value = entry ? entry.elo : 1500;
+    document.getElementById("eloDescInput").value = entry ? entry.description||"" : "";
+    document.getElementById("eloDeleteBtn").classList.toggle("hidden", !entry);
+    document.getElementById("eloModalOverlay").classList.remove("hidden");
+    document.getElementById("eloNameInput").focus();
+  }
+  function closeEloModal(){
+    document.getElementById("eloModalOverlay").classList.add("hidden");
+    editingEloId = null;
+  }
+  document.getElementById("eloModalCancel").addEventListener("click", closeEloModal);
+  document.getElementById("eloModalOverlay").addEventListener("click", e=>{
+    if (e.target.id === "eloModalOverlay") closeEloModal();
+  });
+
+  document.getElementById("eloModalSave").addEventListener("click", async ()=>{
+    const name = document.getElementById("eloNameInput").value.trim();
+    if (!name) { document.getElementById("eloNameInput").focus(); return; }
+    const eloVal = Number(document.getElementById("eloScoreInput").value);
+    const elo = Number.isFinite(eloVal) ? eloVal : 1500;
+    const description = document.getElementById("eloDescInput").value.trim();
+    const now = Date.now();
+    if (editingEloId) {
+      const c = state.elo.find(c=>c.id===editingEloId);
+      Object.assign(c, { name, elo, description, updatedAt: now });
+    } else {
+      state.elo.push({ id: uid(), name, elo, description, createdBy: profile ? profile.username : null, createdAt: now, updatedAt: now });
+    }
+    closeEloModal(); renderElo();
+    await save();
+  });
+
+  document.getElementById("eloDeleteBtn").addEventListener("click", ()=>{
+    if (!editingEloId) return;
+    showConfirm({
+      title: "Move this ranking to trash?", message: "You can restore it later from the Trash.", confirmLabel: "Move to trash",
+      onConfirm: ()=>{
+        const c = state.elo.find(c=>c.id===editingEloId);
+        if (c) moveToTrash("elo", c);
+        state.elo = state.elo.filter(c=>c.id!==editingEloId);
+        save(); closeEloModal(); renderElo();
+      }
+    });
+  });
+
+  /* ---------------- Init ---------------- */
+  try {
+    const savedTheme = localStorage.getItem("owb_theme");
+    applyTheme(savedTheme || "");
+  } catch(e) { applyTheme(""); }
+  loadProfile();
+  if (profile) { enterApp(); } else { showLoginScreen(); }
+  load().then(()=>{
+    showView("dashboard");
+    startPolling();
+  });
+
+})();
+</script>
+</body>
+</html>
