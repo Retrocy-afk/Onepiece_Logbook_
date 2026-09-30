@@ -1396,7 +1396,7 @@
       } catch(e){
         setSyncStatus("err", "Can't reach the shared database");
       }
-    }, 90000);
+    }, 20 * 60 * 1000); // 20 minutes — Realtime handles instant sync; this is just the slow backstop
   }
 
   function uid(){ return Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-4); }
