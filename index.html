@@ -626,6 +626,7 @@
     .topbar, .view { padding-left: 18px; padding-right: 18px; }
   }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <div class="login-screen" id="loginScreen">
@@ -1073,6 +1074,12 @@
   const SUPABASE_URL = "https://cbadagahqunpqnuttgil.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiYWRhZ2FocXVucHFudXR0Z2lsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAyNDM0ODAsImV4cCI6MjEwNTgxOTQ4MH0.mWng6VUG30jsNKk02Mvh6hKjCiWo3fmtTGvpYhUJQFI";
   const SUPABASE_CONFIGURED = !SUPABASE_URL.startsWith("PASTE_") && !SUPABASE_ANON_KEY.startsWith("PASTE_");
+  // The UMD build exposes a global named "supabase" (window.supabase) holding
+  // createClient etc. — named supabaseClient here, and only ever used for
+  // Realtime, so it never collides with that global or with our own state.
+  const supabaseClient = (SUPABASE_CONFIGURED && window.supabase)
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    : null;
 
   const CATS = {
     character: { label: "Character", color: "#B04A31" },
@@ -1329,24 +1336,67 @@
     else if (!document.getElementById("view-timeline").classList.contains("hidden")) renderTimeline();
     else if (!document.getElementById("view-trash").classList.contains("hidden")) renderTrash();
   }
+  /* Applies one incoming remote copy of the state (from Realtime or from a
+     poll) the same way: merge it in, skip while the person is mid-edit so
+     nothing gets clobbered under them, refresh the view if anything
+     actually changed. */
+  function applyRemoteState(remote){
+    if (!remote) return;
+    if (anyModalOpen() || userIsTyping()) return;
+    const merged = mergeStates(state, remote);
+    const changed = JSON.stringify(merged) !== JSON.stringify(state);
+    state = merged;
+    saveLocalCache();
+    if (changed) refreshCurrentView();
+    setSyncStatus("ok", "Synced");
+  }
+
+  /* ---------------- Realtime (instant sync) ----------------
+     Pushes changes to every open tab the moment someone saves, instead of
+     everyone repeatedly asking "anything new?" on a timer. Needs the
+     logbook_state table added to Supabase's realtime publication — see
+     the setup guide. Falls back to relying on the slower safety-net poll
+     below if this can't connect (CDN blocked, replication not enabled on
+     the table yet, etc.), so nothing breaks without it — sync just isn't
+     instant until it's set up. */
+  function startRealtime(){
+    if (!supabaseClient) return false;
+    try {
+      supabaseClient
+        .channel("logbook_state_changes")
+        .on("postgres_changes",
+          { event: "*", schema: "public", table: "logbook_state", filter: "id=eq.main" },
+          payload => applyRemoteState(payload && payload.new && payload.new.data)
+        )
+        .subscribe(status => {
+          if (status === "SUBSCRIBED") setSyncStatus("ok", "Synced (live)");
+          else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED") {
+            setSyncStatus("err", "Live sync interrupted — will retry");
+          }
+        });
+      return true;
+    } catch(e) {
+      console.error("Could not start Realtime, relying on the safety-net poll instead:", e);
+      return false;
+    }
+  }
+
+  /* ---------------- Safety-net poll (slow, infrequent) ----------------
+     Realtime handles moment-to-moment sync; this is just a once-in-a-while
+     backstop in case a Realtime connection silently drops (a backgrounded
+     mobile tab, a network blip that doesn't fire a clean close event,
+     etc.), so a stale tab still catches up eventually even without it. */
   function startPolling(){
     if (!SUPABASE_CONFIGURED) return;
     setInterval(async ()=>{
       if (anyModalOpen() || userIsTyping()) return;
       try {
         const remote = await apiFetchState();
-        if (remote) {
-          const merged = mergeStates(state, remote);
-          const changed = JSON.stringify(merged) !== JSON.stringify(state);
-          state = merged;
-          saveLocalCache();
-          if (changed) refreshCurrentView();
-          setSyncStatus("ok", "Synced");
-        }
+        applyRemoteState(remote);
       } catch(e){
         setSyncStatus("err", "Can't reach the shared database");
       }
-    }, 7000);
+    }, 90000);
   }
 
   function uid(){ return Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-4); }
@@ -3691,6 +3741,7 @@ ${dataStr}
   if (profile) { enterApp(); } else { showLoginScreen(); }
   load().then(()=>{
     showView("dashboard");
+    startRealtime();
     startPolling();
   });
 
