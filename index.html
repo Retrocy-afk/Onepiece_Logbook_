@@ -2153,6 +2153,28 @@ Feel free to look at what we wrote/worked on so far!</div>
     renderSectionTabEditor();
   }
 
+  /* Snapshot of the topic modal's fields right after it opens, so Cancel
+     can tell whether anything was actually changed. Only used to decide
+     whether to warn before discarding — it's never saved anywhere. */
+  let topicModalSnapshot = null;
+  function getTopicModalSnapshot(){
+    if (draftSections[activeSectionIndex]) draftSections[activeSectionIndex].content = modalContentEditor.innerHTML;
+    const cat = (modalCatPicker.querySelector(".cat-option.selected")||{}).dataset?.cat || "";
+    return JSON.stringify({
+      title: document.getElementById("modalTitleInput").value,
+      cat,
+      tags: document.getElementById("modalTagsInput").value,
+      date: document.getElementById("modalDateInput").value,
+      linkedDesignId: document.getElementById("modalLinkedDesignInput").value,
+      linkedMindmapId: document.getElementById("modalLinkedMindmapInput").value,
+      thumbnail: draftTopicThumb,
+      sections: draftSections.map(s=>({ name: s.name, content: s.content }))
+    });
+  }
+  function topicModalIsDirty(){
+    return getTopicModalSnapshot() !== topicModalSnapshot;
+  }
+
   function openTopicModal(topic){
     editingTopicId = topic ? topic.id : null;
     document.getElementById("modalTitle").textContent = topic ? "Edit entry" : "New entry";
@@ -2173,12 +2195,24 @@ Feel free to look at what we wrote/worked on so far!</div>
     modalOverlay.classList.remove("hidden");
     document.getElementById("rteLinkRow").classList.remove("show");
     document.getElementById("modalTitleInput").focus();
+    topicModalSnapshot = getTopicModalSnapshot();
   }
   function closeModal(){ modalOverlay.classList.add("hidden"); editingTopicId = null; }
+  function requestCloseModal(){
+    if (editingTopicId && topicModalIsDirty()) {
+      showConfirm({
+        title: "Discard changes?",
+        message: "You've made changes to this entry that haven't been saved yet.",
+        confirmLabel: "Exit without saving",
+        onConfirm: closeModal
+      });
+    } else {
+      closeModal();
+    }
+  }
 
   document.getElementById("btnNewTopic").addEventListener("click", ()=>openTopicModal(null));
-  document.getElementById("modalCancel").addEventListener("click", closeModal);
-  modalOverlay.addEventListener("click", e=>{ if (e.target === modalOverlay) closeModal(); });
+  document.getElementById("modalCancel").addEventListener("click", requestCloseModal);
 
   document.getElementById("modalSave").addEventListener("click", async ()=>{
     const title = document.getElementById("modalTitleInput").value.trim();
@@ -3562,6 +3596,20 @@ ${dataStr}
     });
   }
 
+  /* Same unsaved-changes snapshot approach as the topic modal, above. */
+  let designModalSnapshot = null;
+  function getDesignModalSnapshot(){
+    return JSON.stringify({
+      name: document.getElementById("designNameInput").value,
+      notes: document.getElementById("designNotesInput").value,
+      bullets: draftBullets,
+      images: draftImages.map(im=>im.dataUrl)
+    });
+  }
+  function designModalIsDirty(){
+    return getDesignModalSnapshot() !== designModalSnapshot;
+  }
+
   function openDesignModal(design){
     editingDesignId = design ? design.id : null;
     document.getElementById("designModalTitle").textContent = design ? "Edit design" : "New design";
@@ -3574,17 +3622,27 @@ ${dataStr}
     document.getElementById("designDeleteBtn").classList.toggle("hidden", !design);
     document.getElementById("designModalOverlay").classList.remove("hidden");
     document.getElementById("designNameInput").focus();
+    designModalSnapshot = getDesignModalSnapshot();
   }
   function closeDesignModal(){
     document.getElementById("designModalOverlay").classList.add("hidden");
     editingDesignId = null; draftImages = []; draftBullets = [];
   }
+  function requestCloseDesignModal(){
+    if (editingDesignId && designModalIsDirty()) {
+      showConfirm({
+        title: "Discard changes?",
+        message: "You've made changes to this design that haven't been saved yet.",
+        confirmLabel: "Exit without saving",
+        onConfirm: closeDesignModal
+      });
+    } else {
+      closeDesignModal();
+    }
+  }
 
   document.getElementById("btnNewDesign").addEventListener("click", ()=>openDesignModal(null));
-  document.getElementById("designModalCancel").addEventListener("click", closeDesignModal);
-  document.getElementById("designModalOverlay").addEventListener("click", e=>{
-    if (e.target.id === "designModalOverlay") closeDesignModal();
-  });
+  document.getElementById("designModalCancel").addEventListener("click", requestCloseDesignModal);
 
   const imgUploadZone = document.getElementById("imgUploadZone");
   const imgFileInput = document.getElementById("imgFileInput");
